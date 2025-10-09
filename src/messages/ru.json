@@ -1,0 +1,1192 @@
+{
+  "common": {
+    "home": "Главная",
+    "settings": "Настройки",
+    "language": "Язык",
+    "search": "Поиск",
+    "username": "Хейлен",
+    "notifications": "Уведомления",
+    "errorTitle": "Упс, что-то пошло не так!",
+    "errorDescription": "Произошла непредвиденная ошибка. Пожалуйста, попробуйте снова или вернитесь на главную страницу.",
+    "unknownError": "Произошла неизвестная ошибка",
+    "tryAgain": "Попробовать снова",
+    "backToHome": "Вернуться на главную",
+    "clearError": "Очистить ошибку",
+    "notFoundTitle": "Страница не найдена",
+    "notFoundDescription": "Страница, которую вы ищете, не существует или была перемещена.",
+    "loading": "Загрузка...",
+    "error": "Произошла ошибка",
+    "save": "Сохранить",
+    "cancel": "Отмена",
+    "delete": "Удалить",
+    "edit": "Редактировать",
+    "create": "Создать",
+    "filter": "Фильтр",
+    "sort": "Сортировка",
+    "more": "Еще",
+    "less": "Свернуть",
+    "all": "Все",
+    "none": "Нет",
+    "yes": "Да",
+    "no": "Нет",
+    "confirm": "Подтвердить",
+    "back": "Назад",
+    "next": "Далее",
+    "previous": "Назад",
+    "submit": "Отправить",
+    "reset": "Сбросить",
+    "close": "Закрыть",
+    "open": "Открыть",
+    "profile": "Профиль",
+    "logout": "Выйти",
+    "login": "Войти",
+    "register": "Регистрация",
+    "forgotPassword": "Забыли пароль?",
+    "resetPassword": "Сбросить пароль",
+    "email": "Email",
+    "password": "Пароль",
+    "name": "Имя",
+    "description": "Описание",
+    "title": "Заголовок",
+    "content": "Содержание",
+    "date": "Дата",
+    "time": "Время",
+    "status": "Статус",
+    "type": "Тип",
+    "category": "Категория",
+    "tags": "Теги",
+    "author": "Автор",
+    "created": "Создано",
+    "updated": "Обновлено",
+    "actions": "Действия",
+    "details": "Подробности",
+    "preview": "Предпросмотр",
+    "download": "Скачать",
+    "upload": "Загрузить",
+    "share": "Поделиться",
+    "copy": "Копировать",
+    "paste": "Вставить",
+    "cut": "Вырезать",
+    "move": "Переместить",
+    "rename": "Переименовать",
+    "duplicate": "Дублировать",
+    "export": "Экспорт",
+    "import": "Импорт",
+    "print": "Печать",
+    "help": "Помощь",
+    "support": "Поддержка",
+    "feedback": "Обратная связь",
+    "about": "О нас",
+    "terms": "Условия",
+    "privacy": "Конфиденциальность",
+    "contact": "Контакты",
+    "faq": "FAQ",
+    "documentation": "Документация",
+    "api": "API",
+    "geolocation": {
+      "unavailable": "Геолокация недоступна",
+      "permissionDenied": "Разрешите доступ к геолокации",
+      "determiningCity": "Определяем город...",
+      "unknownCity": "Неизвестный город"
+    },
+    "navigation": {
+      "home": "Главная",
+      "search": "Поиск",
+      "blog": "Блог"
+    },
+    "brand": {
+      "name": "charming"
+    }
+  },
+  "salonCreation": {
+    "title": "Создать салон",
+    "name": "Название",
+    "namePlaceholder": "Введите название салона",
+    "address": "Адрес",
+    "addressPlaceholder": "Введите адрес или выберите на карте",
+    "phone": "Телефон",
+    "phonePlaceholder": "+375 (99) 123-45-67",
+    "description": "Описание",
+    "descriptionPlaceholder": "Краткое описание салона...",
+    "map": "Карта",
+    "hideMap": "Скрыть карту",
+    "showMap": "Показать карту",
+    "mapInstructions": "Выберите местоположение на карте",
+    "mapHelp": "Кликните на карту или перетащите маркер для выбора местоположения",
+    "coordinates": "Координаты",
+    "createButton": "Создать салон",
+    "creating": "Создание...",
+    "success": "Салон успешно создан!",
+    "mapError": "Google Maps не загружен",
+    "mapErrorHelp": "Убедитесь, что у вас есть доступ к интернету и Google Maps API ключ настроен",
+    "error": "Ошибка загрузки карты",
+    "instructions": "Кликните на карту или перетащите маркер для выбора местоположения",
+    "selectedAddress": "Выбранный адрес",
+    "selectOnMap": "Выбрать на карте",
+    "changeOnMap": "Изменить на карте",
+    "requiredName": "Название салона обязательно",
+    "requiredAddress": "Адрес обязателен",
+    "invalidPhone": "Пожалуйста, введите корректный номер телефона",
+    "descriptionTooLong": "Описание слишком длинное (макс {max} символов)",
+    "phoneHelp": "Укажите код страны, например +375 99 123-45-67"
+  },
+  "mapSelector": {
+    "title": "Выберите местоположение на карте",
+    "instructions": "Кликните на карту или перетащите маркер для выбора местоположения",
+    "error": "Ошибка загрузки карты",
+    "errorHelp": "Убедитесь, что у вас есть доступ к интернету и Google Maps API ключ настроен"
+  },
+  "status": {
+    "active": "Активно",
+    "inactive": "Неактивно",
+    "pending": "В ожидании",
+    "completed": "Завершено",
+    "failed": "Ошибка",
+    "cancelled": "Отменено",
+    "draft": "Черновик",
+    "published": "Опубликовано",
+    "archived": "В архиве"
+  },
+  "blog": {
+    "title": "Блог",
+    "subtitle": "Полезные статьи и советы",
+    "readMore": "Читать далее",
+    "publishedAt": "Опубликовано",
+    "readTime": "мин чтения",
+    "author": "Автор",
+    "category": "Категория",
+    "tags": "Теги",
+    "relatedPosts": "Похожие статьи",
+    "search": "Поиск по блогу",
+    "searchPlaceholder": "Найти статью...",
+    "noResults": "Статьи не найдены",
+    "loading": "Загрузка статей..."
+  },
+  "search": {
+    "title": "Поиск",
+    "noMoreServices": "Больше услуг не найдено",
+    "tryChangingFilters": "Попробуйте изменить параметры поиска",
+    "description": "Описание",
+    "subtitle": "Найдите нужные услуги и салоны",
+    "details": "Подробности",
+    "searchPlaceholder": "Поиск по услугам, салонам...",
+    "filters": "Фильтры",
+    "sortBy": "Сортировать по",
+    "results": "Результаты поиска",
+    "noResults": "Ничего не найдено",
+    "tryDifferent": "Попробуйте изменить параметры поиска",
+    "loading": "Поиск...",
+    "servicesTitle": "Услуги",
+    "book": "Забронировать",
+    "unknownCity": "Неизвестный город",
+    "cityFilter": "Показываем услуги в городе: {city}",
+    "noServicesInCity": "Не найдено услуг в городе {city}",
+    "aboutSalon": "О салоне",
+    "servicesCount": "{count} услуг",
+    "servicesCountOne": "{count} услуга",
+    "servicesCountFew": "{count} услуги",
+    "servicesCountMany": "{count} услуг",
+    "showMap": "Показать карту",
+    "hideMap": "Скрыть карту",
+    "mapTitle": "Карта салонов",
+    "mapInstructions": "Кликните на маркер салона для просмотра его услуг",
+    "mapError": "Ошибка загрузки карты",
+    "mapErrorHelp": "Убедитесь, что у вас есть доступ к интернету и Google Maps API ключ настроен",
+    "selectedSalonFilter": "Показываем услуги салона: {salonName}",
+    "cityFilterMessage": "Показываем услуги в городе: {city}",
+    "noServicesInCityMessage": "Не найдено услуг в городе {city}",
+    "salonsCount": "{count} салонов",
+    "salonsCountOne": "{count} салон",
+    "salonsCountFew": "{count} салона",
+    "salonsCountMany": "{count} салонов",
+    "selectCity": "Выбрать город",
+    "popularCities": "Популярные города",
+    "customCity": "Другой город",
+    "enterCityName": "Введите название города",
+    "confirm": "Подтвердить",
+    "cancel": "Отмена",
+    "showingInCity": "Показываем услуги в городе: {city}",
+    "detectedCity": "Определен город: {city}",
+    "clearCitySelection": "Очистить выбор города",
+    "showingSalonServices": "Показываем услуги салона: {salonName}",
+    "clearSalonFilter": "Очистить фильтр салона",
+    "activeFilters": "Активные фильтры",
+    "searchQuery": "Поисковый запрос",
+    "city": "Город",
+    "salon": "Салон",
+    "clearAll": "Очистить все",
+    "loadingMap": "Загрузка карты...",
+    "noSalonsWithCoordinates": "Нет салонов с координатами для отображения на карте",
+    "categories": {
+      "all": "Все категории",
+      "hair": "Волосы",
+      "nails": "Ногти",
+      "face": "Лицо",
+      "body": "Тело",
+      "massage": "Массаж"
+    },
+    "sortOptions": {
+      "relevance": "По релевантности",
+      "rating": "По рейтингу",
+      "price": "По цене",
+      "distance": "По расстоянию"
+    },
+    "category": "Категория",
+    "allCategories": "Все категории",
+    "promoted": "Продвигаемые",
+    "relevance": "По релевантности",
+    "priceAsc": "По цене (возрастание)",
+    "durationAsc": "По длительности (возрастание)",
+    "clearFilters": "Очистить фильтры",
+    "resultsCount": "Найдено {count} результатов",
+    "promotedFirst": "Продвигаемые услуги показаны первыми"
+  },
+  "home": {
+    "title": "Beauty Platform",
+    "subtitle": "Найдите лучшие салоны красоты рядом с вами",
+    "heroTitle": "Красота начинается здесь",
+    "heroSubtitle": "Откройте для себя лучшие салоны красоты и спа-центры в вашем городе",
+    "mission": "Соединяем профессионалов красоты с клиентами",
+    "getStartedClient": "Найти услуги",
+    "getStartedPro": "Присоединиться как профессионал",
+    "featuresTitle": "Почему выбирают нас",
+    "clientBenefitsTitle": "Для клиентов",
+    "proBenefitsTitle": "Для профессионалов",
+    "howItWorksTitle": "Как это работает",
+    "clientBenefits": [
+      "Простое бронирование с проверенными салонами",
+      "Прозрачные цены и отзывы",
+      "Широкий спектр услуг красоты",
+      "Удобная система планирования"
+    ],
+    "proBenefits": [
+      "Эффективное управление записями",
+      "Расширение клиентской базы",
+      "Профессиональная платформа бронирования",
+      "Аналитика"
+    ],
+    "steps": [
+      "Выберите услугу",
+      "Выберите удобное время",
+      "Забронируйте и подтвердите",
+      "Наслаждайтесь приемом"
+    ],
+    "hero": {
+      "title": "Красота начинается здесь",
+      "subtitle": "Откройте для себя лучшие салоны красоты и спа-центры в вашем городе",
+      "searchPlaceholder": "Поиск услуг или салонов...",
+      "searchButton": "Найти",
+      "popularServices": "Популярные услуги"
+    },
+    "features": {
+      "title": "Почему выбирают нас",
+      "easyBooking": "Простое бронирование",
+      "verifiedSalons": "Проверенные салоны",
+      "bestPrices": "Лучшие цены",
+      "customerSupport": "Поддержка клиентов"
+    },
+    "categories": {
+      "title": "Категории услуг",
+      "hair": "Волосы",
+      "nails": "Ногти",
+      "face": "Лицо",
+      "body": "Тело",
+      "massage": "Массаж"
+    },
+    "testimonials": {
+      "title": "Отзывы клиентов",
+      "subtitle": "Что говорят о нас"
+    },
+    "ctaTitle": "Готовы начать?",
+    "ctaDescription": "Присоединяйтесь к тысячам довольных клиентов, которые доверяют Beauty Platform свои потребности в красоте.",
+    "startNow": "Начать сейчас",
+    "footerText": "Соединяем профессионалов красоты с клиентами по всему миру. Ваше путешествие к красоте начинается здесь.",
+    "faqTitle": "Часто задаваемые вопросы"
+  },
+  "footer": {
+    "company": "Компания",
+    "about": "О нас",
+    "careers": "Карьера",
+    "press": "Пресса",
+    "support": "Поддержка",
+    "help": "Помощь",
+    "contact": "Контакты",
+    "legal": "Правовая информация",
+    "terms": "Условия использования",
+    "privacy": "Политика конфиденциальности",
+    "cookies": "Файлы cookie",
+    "social": "Социальные сети",
+    "followUs": "Подписывайтесь на нас",
+    "newsletter": "Новостная рассылка",
+    "subscribe": "Подписаться",
+    "emailPlaceholder": "Ваш email"
+  },
+  "errors": {
+    "404": {
+      "title": "Страница не найдена",
+      "subtitle": "Извините, страница, которую вы ищете, не существует",
+      "backHome": "Вернуться на главную",
+      "search": "Поиск по сайту"
+    },
+    "500": {
+      "title": "Внутренняя ошибка сервера",
+      "subtitle": "Что-то пошло не так. Попробуйте обновить страницу",
+      "refresh": "Обновить страницу",
+      "backHome": "Вернуться на главную"
+    },
+    "network": {
+      "title": "Ошибка сети",
+      "subtitle": "Проверьте подключение к интернету и попробуйте снова",
+      "retry": "Попробовать снова"
+    },
+    "auth": {
+      "title": "Ошибка авторизации",
+      "subtitle": "Не удалось выполнить вход. Проверьте данные и попробуйте снова",
+      "login": "Войти",
+      "register": "Зарегистрироваться",
+      "invalidCredentials": "Неверный email или пароль",
+      "emailAlreadyInUse": "Этот email уже зарегистрирован",
+      "weakPassword": "Пароль слишком слабый. Используйте не менее 6 символов",
+      "passwordsDoNotMatch": "Пароли не совпадают",
+      "invalidEmail": "Некорректный email",
+      "requiredField": "Это поле обязательно для заполнения",
+      "internalError": "Произошла внутренняя ошибка. Пожалуйста, попробуйте позже",
+      "tooManyRequests": "Слишком много попыток. Пожалуйста, попробуйте позже",
+      "userDisabled": "Аккаунт отключен",
+      "operationNotAllowed": "Эта операция не разрешена",
+      "accountExistsWithDifferentCredential": "Аккаунт с таким email уже существует"
+    
+    }
+  },
+  "notifications": {
+    "title": "Уведомления",
+    "markAllRead": "Отметить все как прочитанные",
+    "noNotifications": "У вас нет новых уведомлений",
+    "types": {
+      "appointment": "Запись",
+      "reminder": "Напоминание",
+      "promotion": "Акция",
+      "system": "Система"
+    },
+    "actions": {
+      "view": "Просмотреть",
+      "dismiss": "Отклонить",
+      "markRead": "Отметить как прочитанное"
+    }
+  },
+  "booking": {
+    "title": "Бронирование",
+    "selectService": "Выберите услугу",
+    "selectDate": "Выберите дату",
+    "selectTime": "Выберите время",
+    "selectStaff": "Выберите мастера",
+    "customerInfo": "Информация о клиенте",
+    "confirmation": "Подтверждение",
+    "summary": "Сводка",
+    "total": "Итого",
+    "bookNow": "Забронировать",
+    "cancel": "Отменить",
+    "reschedule": "Перенести",
+    "hourlySlots": "Доступное время только по часам",
+    "hourlySlotsDesc": "Запись возможна в начале каждого часа (например: 10:00, 11:00, 12:00)",
+    "anySpecialist": "Любой специалист",
+    "customerName": "Ваше имя",
+    "customerNamePlaceholder": "Введите ваше имя",
+    "customerPhone": "Телефон",
+    "customerPhonePlaceholder": "+375 (99) 123-45-67",
+    "autoFilled": "✓ Автоматически заполнено из профиля",
+    "requiredFields": "Пожалуйста, заполните все обязательные поля",
+    "staffSelectionNote": "При выборе специалиста доступное время будет пересчитано",
+    "status": {
+      "pending": "Ожидает подтверждения",
+      "confirmed": "Подтверждена",
+      "completed": "Завершена",
+      "cancelled": "Отменена"
+    }
+  },
+  "auth": {
+    "signIn": "Войти",
+    "signUp": "Зарегистрироваться",
+    "noAccount": "Нет аккаунта?",
+    "haveAccount": "Уже есть аккаунт?",
+    "switchToRegister": "Зарегистрироваться",
+    "switchToLogin": "Войти",
+    "login": {
+      "title": "Войти в аккаунт",
+      "subtitle": "Добро пожаловать обратно! Войдите в свой аккаунт",
+      "email": "Email",
+      "password": "Пароль",
+      "forgotPassword": "Забыли пароль?",
+      "signIn": "Войти",
+      "noAccount": "Нет аккаунта?",
+      "switchToRegister": "Зарегистрироваться"
+    },
+    "register": {
+      "title": "Создать аккаунт",
+      "subtitle": "Присоединяйтесь к нам! Создайте свой аккаунт",
+      "name": "Имя",
+      "email": "Email",
+      "password": "Пароль",
+      "confirmPassword": "Подтвердите пароль",
+      "signUp": "Зарегистрироваться",
+      "haveAccount": "Уже есть аккаунт?",
+      "switchToLogin": "Войти"
+    },
+    "or": "или",
+    "continueWithGoogle": "Продолжить с Google",
+"errors": {
+      "invalidCredentials": "Неверный email или пароль",
+      "emailAlreadyInUse": "Этот email уже зарегистрирован",
+      "weakPassword": "Пароль слишком слабый. Используйте не менее 6 символов",
+      "passwordsDoNotMatch": "Пароли не совпадают",
+      "invalidEmail": "Некорректный email",
+      "requiredField": "Это поле обязательно для заполнения",
+      "internalError": "Произошла внутренняя ошибка. Пожалуйста, попробуйте позже",
+      "tooManyRequests": "Слишком много попыток. Пожалуйста, попробуйте позже",
+      "userDisabled": "Аккаунт отключен",
+      "operationNotAllowed": "Эта операция не разрешена",
+      "accountExistsWithDifferentCredential": "Аккаунт с таким email уже существует",
+      "requestFalied": "Ошибка сети, проверьте интернет соединение"
+    }
+  },
+  "salon": {
+    "create": {
+      "title": "Создать салон",
+      "success": "Салон успешно создан!",
+      "error": "Ошибка при создании салона"
+    },
+    "edit": {
+      "title": "Редактировать салон",
+      "success": "Салон успешно обновлен!",
+      "error": "Ошибка при обновлении салона"
+    },
+    "delete": {
+      "title": "Удалить салон",
+      "confirm": "Вы уверены, что хотите удалить этот салон?",
+      "success": "Салон успешно удален!",
+      "error": "Ошибка при удалении салона"
+    }
+  },
+  "appointments": {
+    "title": "Записи",
+    "create": "Создать запись",
+    "edit": "Редактировать запись",
+    "delete": "Удалить запись",
+    "status": {
+      "pending": "Ожидает подтверждения",
+      "confirmed": "Подтверждена",
+      "completed": "Завершена",
+      "cancelled": "Отменена",
+      "no_show": "Не явился"
+    },
+    "actions": {
+      "confirm": "Подтвердить",
+      "complete": "Завершить",
+      "cancel": "Отменить",
+      "reschedule": "Перенести"
+    }
+  },
+  "services": {
+    "title": "Услуги",
+    "create": "Создать услугу",
+    "edit": "Редактировать услугу",
+    "delete": "Удалить услугу",
+    "name": "Название услуги",
+    "description": "Описание",
+    "price": "Цена",
+    "duration": "Длительность",
+    "category": "Категория"
+  },
+  "staff": {
+    "title": "Сотрудники",
+    "add": "Добавить сотрудника",
+    "edit": "Редактировать сотрудника",
+    "remove": "Удалить сотрудника",
+    "name": "Имя",
+    "role": "Должность",
+    "email": "Email",
+    "phone": "Телефон"
+  },
+  "schedule": {
+    "title": "Расписание",
+    "workingHours": "Рабочие часы",
+    "breaks": "Перерывы",
+    "days": {
+      "monday": "Понедельник",
+      "tuesday": "Вторник",
+      "wednesday": "Среда",
+      "thursday": "Четверг",
+      "friday": "Пятница",
+      "saturday": "Суббота",
+      "sunday": "Воскресенье"
+    },
+    "status": {
+      "open": "Открыто",
+      "closed": "Закрыто"
+    }
+  },
+  "clients": {
+    "title": "Клиенты",
+    "add": "Добавить клиента",
+    "edit": "Редактировать клиента",
+    "name": "Имя",
+    "email": "Email",
+    "phone": "Телефон",
+    "notes": "Заметки"
+  },
+  "analytics": {
+    "title": "Аналитика",
+    "revenue": "Доход",
+    "appointments": "Записи",
+    "clients": "Клиенты",
+    "services": "Услуги",
+    "period": {
+      "today": "Сегодня",
+      "week": "Неделя",
+      "month": "Месяц",
+      "year": "Год"
+    }
+  },
+  "reports": {
+    "title": "Отчеты",
+    "generate": "Сгенерировать отчет",
+    "export": "Экспорт",
+    "types": {
+      "revenue": "Отчет по доходам",
+      "appointments": "Отчет по записям",
+      "clients": "Отчет по клиентам",
+      "services": "Отчет по услугам"
+    }
+  },
+  "dashboard": {
+    "title": "Панель управления",
+    "welcome": "Добро пожаловать в",
+    "quickStats": "Быстрая статистика",
+    "members": "Участники",
+    "contentPlans": "Планы контента",
+    "recentActivity": "Недавняя активность",
+    "noRecentActivity": "Нет недавней активности",
+    "quickActions": "Быстрые действия",
+    "createContentPlan": "Создать план контента",
+    "workspaceSettings": "Настройки рабочего пространства",
+    "viewAll": "Посмотреть все",
+    "stats": {
+      "totalMembers": "Всего участников",
+      "activeContentPlans": "Активных планов контента",
+      "totalViews": "Всего просмотров",
+      "totalEngagement": "Общее взаимодействие",
+      "conversionRate": "Конверсия"
+    }
+  },
+  "Tasks": {
+    "title": "Задачи",
+    "description": "Управляйте задачами и проектами в стиле Agile",
+    "createTask": "Создать задачу",
+    "createBoardButton": "Создать доску",
+    "board": "Доска",
+    "searchPlaceholder": "Поиск задач...",
+    "deleteConfirm": "Вы уверены, что хотите удалить эту задачу?",
+    "unassigned": "Не назначена",
+    "overdue": "Просрочена",
+    "estimatedHours": "Оценка часов",
+    "loading": "Загрузка задач...",
+    "noTasks": "Нет задач в этой колонке",
+    "stats": {
+      "total": "Всего",
+      "my": "Мои",
+      "unassigned": "Не назначены",
+      "overdue": "Просрочены",
+      "inProgress": "В работе",
+      "done": "Завершены"
+    },
+    "filters": {
+      "all": "Все задачи",
+      "my": "Мои задачи",
+      "unassigned": "Не назначенные",
+      "overdue": "Просроченные"
+    },
+    "status": {
+      "backlog": "Бэклог",
+      "todo": "К выполнению",
+      "inProgress": "В работе",
+      "review": "На проверке",
+      "done": "Завершено"
+    },
+    "priority": {
+      "low": "Низкий",
+      "medium": "Средний",
+      "high": "Высокий",
+      "urgent": "Срочный"
+    },
+    "type": {
+      "feature": "Функция",
+      "bug": "Ошибка",
+      "improvement": "Улучшение",
+      "task": "Задача",
+      "story": "История"
+    },
+    "actions": {
+      "edit": "Редактировать",
+      "delete": "Удалить",
+      "assign": "Назначить",
+      "move": "Переместить"
+    },
+    "create": {
+      "title": "Название",
+      "titlePlaceholder": "Введите название задачи",
+      "description": "Описание",
+      "descriptionPlaceholder": "Введите описание задачи",
+      "priority": "Приоритет",
+      "type": "Тип",
+      "assignee": "Исполнитель",
+      "estimatedHours": "Оценка часов",
+      "dueDate": "Срок выполнения",
+      "tags": "Теги",
+      "addTag": "Добавить тег",
+      "add": "Добавить",
+      "status": "Статус",
+      "cancel": "Отмена",
+      "submit": "Создать задачу"
+    },
+    "edit": {
+      "title": "Редактировать задачу",
+      "submit": "Сохранить изменения"
+    },
+    "createBoard": {
+      "title": "Создать доску",
+      "name": "Название",
+      "namePlaceholder": "Введите название доски",
+      "description": "Описание",
+      "descriptionPlaceholder": "Введите описание доски",
+      "cancel": "Отмена",
+      "submit": "Создать доску"
+    },
+    "list": {
+      "title": "Список задач",
+      "subtitle": "{count} задач найдено",
+      "empty": "Задачи не найдены",
+      "emptyTitle": "Пока нет задач"
+    },
+    "assignee": {
+      "placeholder": "Выберите исполнителя",
+      "loading": "Загрузка участников...",
+      "noMembers": "Участники рабочего пространства не найдены",
+      "workspaceMembers": "Участники рабочего пространства"
+    },
+    "dragAndDrop": {
+      "dragToMove": "Перетащите для перемещения задачи",
+      "dropHere": "Отпустите здесь для перемещения задачи",
+      "movingTask": "Перемещение задачи...",
+      "taskMoved": "Задача успешно перемещена"
+    },
+    "error": {
+      "title": "Ошибка загрузки задач"
+    }
+  },
+  "searchPage": {
+    "title": "Поиск салонов и услуг",
+    "placeholder": "Введите запрос (например: маникюр, стрижка, адрес...)",
+    "tabs": {
+      "all": "Все",
+      "salons": "Салоны",
+      "services": "Услуги"
+    },
+    "loading": "Загрузка...",
+    "empty": "Ничего не найдено",
+    "salonsTitle": "Салоны",
+    "servicesTitle": "Услуги",
+    "book": "Записаться",
+    "salonLabel": "Салон:"
+  },
+  "profilePage": {
+    "title": "Профиль",
+    "loading": "Загрузка...",
+    "quickActions": {
+      "title": "Быстрые действия",
+      "mySalons": "Мои салоны",
+      "mySalonsDesc": "Управление салонами красоты",
+      "findServices": "Найти услуги",
+      "findServicesDesc": "Поиск салонов и услуг"
+    },
+    "requireLogin": {
+      "title": "Требуется авторизация",
+      "desc": "Для просмотра профиля необходимо войти в систему",
+      "login": "Войти",
+      "register": "Регистрация"
+    },
+    "settings": {
+      "title": "Настройки аккаунта",
+      "name": "Имя",
+      "language": "Язык",
+      "notifications": "Уведомления",
+      "savePrefs": "Сохранить настройки",
+      "saveProfile": "Сохранить профиль"
+    },
+    "appointments": {
+      "title": "Мои записи",
+      "empty": "У вас пока нет записей",
+      "status": "Статус:",
+      "rebook": "Записаться снова"
+    }
+  },
+  
+  
+  "salonSettings": {
+    "title": "Настройки салона",
+    "subtitle": "Управляйте настройками вашего бизнеса и системы",
+    "loading": "Загрузка...",
+    "saving": "Сохранение...",
+    "loadingTitle": "Загрузка настроек салона...",
+    "common": {
+      "cancel":"Отменить"
+    },
+    "notFound": {
+      "title": "Салон не найден",
+      "description": "Запрашиваемый салон не существует или был удален"
+    },
+    "accessDenied": {
+      "title": "Доступ запрещен",
+      "description": "У вас нет прав для изменения настроек этого салона"
+    },
+    "error": {
+      "saveFailed": "Не удалось сохранить настройки",
+      "loadFailed": "Не удалось загрузить данные салона",
+      "invalidEmail": "Пожалуйста, введите корректный email или оставьте поле пустым"
+    },
+    
+    "sections": {
+
+      "subscription": {
+      "title": "Управление подпиской",
+      "purchase": "Оформить подписку",
+      "loading": "Загрузка подписок...",
+      "noSubscriptions": "Активных подписок не найдено.",
+      "period": "Период оплаты",
+      "modalTitle": "Выберите тарифный план",
+      "purchaseSuccess": "Подписка успешно оформлена!",
+      "cancelAnytime": "Можно отменить в любой момент.",
+      "purchaseNow": "Оформить подписку",
+      "processing": "Обработка",
+      "selectPlan": "Выбрать тариф",
+      "selected": "Выбрано",
+      "noPlansTitle": "Нет доступных тарифов",
+      "noPlans": "В данный момент нет доступных тарифных планов. Пожалуйста, проверьте позже.",
+      "billingPeriods": {
+        "monthly": "месяц",
+        "yearly": "год"
+      },
+      "statuses": {
+        "active": "Активна",
+        "trialing": "Пробный период",
+        "past_due": "Просрочен платеж",
+        "canceled": "Отменена",
+        "unpaid": "Не оплачено",
+        "expired": "Истекла"
+      }
+    },
+      "business": {
+        "title": "Информация о бизнесе",
+        "name": "Название салона",
+        "email": "Email",
+        "phone": "Телефон",
+        "address": "Адрес",
+        "timezone": "Часовой пояс",
+        "currency": "Валюта",
+        "optional": "необязательно",
+        "emailPlaceholder": "Введите email или оставьте пустым",
+        "phonePlaceholder": "Введите телефон или оставьте пустым",
+        "save": "Сохранить",
+        "saved": "Информация о бизнесе сохранена"
+      },
+      "notifications": {
+        "title": "Уведомления",
+        "email": "Email уведомления",
+        "sms": "SMS уведомления",
+        "push": "Push уведомления",
+        "reminderTime": "Время напоминания",
+        "save": "Сохранить",
+        "saved": "Настройки уведомлений сохранены"
+      },
+      "security": {
+        "title": "Безопасность",
+        "twoFactor": "Двухфакторная аутентификация",
+        "sessionTimeout": "Таймаут сессии",
+        "passwordExpiry": "Срок действия пароля",
+        "save": "Сохранить",
+        "saved": "Настройки безопасности сохранены"
+      },
+      "integrations": {
+        "title": "Интеграции",
+        "googleCalendar": "Google Календарь",
+        "telegramBot": "Telegram бот",
+        "whatsapp": "WhatsApp",
+        "save": "Сохранить",
+        "saved": "Настройки интеграций сохранены"
+      }
+    }
+  },
+  "salonCrm": {
+    "menu": {
+      "salon": "Салон",
+      "title": "Меню",
+      "dashboard": "Панель управления",
+      "appointments": "Записи",
+      "services": "Услуги",
+      "schedule": "Расписание",
+      "staff": "Сотрудники",
+      "settings": "Настройки",
+      "promotion": "Продвижение",
+      "chats": "Чаты",
+      "ratings": "Отзывы",
+      "analytics": "Аналитика"
+    }
+  },
+  "salonAppointments": {
+    "title": "Записи на услуги",
+    "loading": "Загрузка записей...",
+    "error": "Ошибка загрузки данных",
+    "retry": "Попробовать снова",
+    "noAppointments": "Записи не найдены",
+    "totalAppointments": "Всего записей: {count}",
+    "showingAppointments": "Показано: {count}",
+    "searchPlaceholder": "Поиск по имени, телефону или услуге...",
+    "filters": {
+      "allStatuses": "Все статусы",
+      "allDates": "Все даты",
+      "allServices": "Все услуги",
+      "pending": "Ожидает",
+      "confirmed": "Подтверждена",
+      "completed": "Завершена",
+      "cancelled": "Отменена",
+      "today": "Сегодня",
+      "tomorrow": "Завтра",
+      "week": "На неделю",
+      "past": "Прошедшие"
+    },
+    "status": {
+      "pending": "Ожидает",
+      "confirmed": "Подтверждена",
+      "completed": "Завершена",
+      "cancelled": "Отменена",
+      "no_show": "Не явился"
+    },
+    "actions": {
+      "confirm": "Подтвердить",
+      "cancel": "Отменить",
+      "complete": "Завершить"
+    },
+    "pagination": {
+      "previous": "Назад",
+      "next": "Вперед"
+    }
+  },
+  "forms": {
+    "required": "Обязательное поле",
+    "invalidEmail": "Некорректный email",
+    "invalidPhone": "Некорректный номер телефона",
+    "minLength": "Минимальная длина: {min} символов",
+    "maxLength": "Максимальная длина: {max} символов",
+    "optional": "(необязательно)",
+    "save": "Сохранить",
+    "cancel": "Отмена",
+    "submit": "Отправить",
+    "loading": "Загрузка...",
+    "saving": "Сохранение...",
+    "success": "Успешно сохранено",
+    "error": "Произошла ошибка"
+  },
+  "validation": {
+    "required": "Это поле обязательно для заполнения",
+    "email": "Введите корректный email",
+    "phone": "Введите корректный номер телефона",
+    "minLength": "Минимальная длина: {min} символов",
+    "maxLength": "Максимальная длина: {max} символов",
+    "invalidFormat": "Неверный формат"
+  },
+  "salonChats": {
+    "title": "Чаты с клиентами",
+    "subtitle": "Общение с клиентами салона",
+    "backToSalon": "Назад к салону",
+    "needLogin": "Необходимо войти в систему",
+    "login": "Войти",
+    "loadingChats": "Загрузка чатов...",
+    "error": "Ошибка",
+    "errorDescription": "Не удалось загрузить чаты. Пожалуйста, попробуйте снова.",
+    "retry": "Повторить",
+    "noChatsTitle": "Нет активных чатов",
+    "noChatsDesc": "У вас пока нет чатов. Чаты появятся после бронирования услуг.",
+    "noMessages": "Нет сообщений",
+    "chatByAppointment": "Чат по записи",
+    "linkedToService": "Связан с услугой",
+    "yesterday": "Вчера"
+  },
+  "chat": {
+    "loadingChat": "Загрузка чата...",
+    "errorLoading": "Не удалось загрузить чат",
+    "retry": "Повторить",
+    "sendError": "Не удалось отправить сообщение",
+    "fileTooLarge": "Файл слишком большой: {name} (макс 5 МБ)",
+    "unsupportedFileType": "Неподдерживаемый тип файла: {name}",
+    "startConversation": "Начните разговор",
+    "active": "Активен",
+    "generalChat": "Общий чат",
+    "chatByAppointment": "Чат по записи",
+    "placeholder": "Введите сообщение...",
+    "filesSent": "Отправлено {count} файл(ов): {names}",
+    "errorMarkRead": "Не удалось отметить сообщения как прочитанные",
+    "errorNoUser": "Пользователь не авторизован"
+  },
+  "salonSchedule": {
+    "title": "Расписание салона",
+    "createBooking": "Создать запись",
+    "service": "Услуга",
+    "scheduleSetup": "Настройки расписания",
+    "client": "Клиент",
+    "master": "Мастер",
+    "comment": "Комментарий",
+    "changeStatus": "Изменить статус",
+    "scheduleSaved": "Расписание сохранено!",
+    "open": "Открыто",
+    "addInterval": "+ Добавить интервал",
+    "cancel": "Отмена",
+    "save": "Сохранить",
+    "loading": "Загрузка...",
+    "error": "Произошла ошибка",
+    "retry": "Повторить попытку",
+    "setupSchedule": "Настроить расписание",
+    "currentWeek": "Текущая неделя",
+    "week": "Неделя {weekNum}",
+    "showingAppointments": "Показано {count} записей",
+    "filters": {
+      "allStatuses": "Все статусы",
+      "allServices": "Все услуги"
+    },
+    "status": {
+      "pending": "Ожидание",
+      "confirmed": "Подтверждено",
+      "completed": "Завершено",
+      "cancelled": "Отменено",
+      "no_show": "Неявка"
+    },
+    "appointmentDetails": {
+      "title": "Детали записи",
+      "date": "Дата",
+      "time": "Время",
+      "customer": "Клиент",
+      "phone": "Телефон",
+      "master": "Мастер",
+      "notes": "Комментарий",
+      "changeStatus": "Изменить статус",
+      "chatWithCustomer": "Написать клиенту"
+    },
+    "noAppointments": "Нет записей на этот день"
+  },
+    "salons": {
+      "pageTitle": "Мои салоны",
+      "createButton": "+ Новый салон",
+      "loading": "Загрузка...",
+      "maxSalonsReached": "Вы достигли максимального количества салонов ({max}). Удалите один из существующих салонов, чтобы создать новый.",
+      "noSalons": "У вас пока нет салонов.",
+      "role": "Ваша роль: {role}",
+      "joined": "Присоединились: {date}",
+      "goToCRM": "Перейти к управлению",
+      "failedToLoadName": "Не удалось загрузить название"
+    },
+    "SalonServicesPage": {
+      "header": {
+        "title": "Управление услугами",
+        "subtitle": "Добавляйте и редактируйте услуги вашего салона",
+        "addServiceButton": "Добавить услугу"
+      },
+      "loading": "Загрузка услуг...",
+      "emptyState": {
+        "title": "Нет услуг",
+        "description": "Начните с добавления первой услуги для вашего салона",
+        "addFirstServiceButton": "Добавить первую услугу"
+      },
+      "serviceCard": {
+        "noPhoto": "Нет фото",
+        "minutes": "мин",
+        "inApp": "Приложение",
+        "active": "Активна",
+        "inactive": "Неактивна",
+        "photosTitle": "Фотографии",
+        "addPhotoButton": "Добавить"
+      },
+      "modal": {
+        "titleEdit": "Редактировать услугу",
+        "titleAdd": "Добавить услугу",
+        "form": {
+          "newCategoryPlaceholder": "Новая категория",
+          "noCategories": "Нет категорий",
+          "nameLabel": "Название услуги *",
+          "namePlaceholder": "Например: Мужская стрижка",
+          "descriptionLabel": "Описание",
+          "descriptionPlaceholder": "Краткое описание услуги...",
+          "priceLabel": "Цена ({currency}) *",
+          "addCategory": "Добавить категорию",
+          "durationLabel": "Длительность (мин) *",
+          "categoriesLabel": "Категории",
+          "isActiveLabel": "Услуга активна",
+          "isAppLabel": "Запись через приложение",
+          "cancelButton": "Отмена",
+          "saveButton": "Сохранить изменения",
+          "addButton": "Добавить услугу",
+          "savingButton": "Сохранение..."
+        },
+        "errors": {
+          "nameRequired": "Название обязательно",
+          "durationInvalid": "Продолжительность должна быть больше 0",
+          "genericSaveError": "Ошибка при сохранении услуги",
+          "categoryCreateFailed": "Ошибка при создании категории",
+          "maxCategories": "Максимальное количество категорий для услуги - 6"
+        }
+      }
+    },
+    "SalonPromotionsPage": {
+      "loading": "Загрузка данных...",
+      "header": {
+        "title": "Продвижение услуг",
+        "subtitle": "Увеличьте видимость ваших услуг и привлекайте больше клиентов."
+      },
+      "serviceCard": {
+        "minutes": "мин",
+        "promotionActive": "Продвижение активно",
+        "activeUntil": "Активно до {date}",
+        "viewAnalyticsButton": "Смотреть аналитику",
+        "viewPastAnalyticsButton": "Прошлая аналитика",
+        "promoteButton": "Продвигать"
+      },
+      "purchaseModal": {
+        "title": "Продвижение услуги",
+        "selectPlan": "Выберите план продвижения",
+        "duration": "{days, plural, =1 {# день} one {# день} few {# дня} many {# дней} other {# дней}}",
+        "cancelButton": "Отмена",
+        "confirmButton": "Купить и активировать"
+      },
+      "analyticsModal": {
+        "title": "Аналитика продвижения",
+        "totalImpressions": "Всего показов",
+        "totalClicks": "Всего кликов",
+        "totalBookings": "Всего записей",
+        "dailyStats": "Статистика по дням",
+        "date": "Дата",
+        "impressions": "Показы",
+        "clicks": "Клики",
+        "bookings": "Записи",
+        "noData": "Данные по аналитике еще не собраны.",
+        "closeButton": "Закрыть"
+      }
+    },
+    "bookingPage": {
+      "modalTitle": "Создать запись вручную",
+    "loading": "Загрузка...",
+    "errorTitle": "Ошибка",
+    "backButton": "Назад",
+    "successMessage": "Запись успешно создана!",
+    "header": {
+      "minutes": "мин",
+      "currency": "₽"
+    },
+    "scheduleInfo": "Запись возможна минимум за 2 часа до начала процедуры.",
+    "calendar": {
+      "title": "Выберите дату",
+      "daysOfWeek": ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"],
+      "legendAvailable": "Есть свободные окна",
+      "legendUnavailable": "Нет свободных окон"
+    },
+    "timeSelector": {
+      "title": "Выберите время",
+      "loading": "Загрузка доступного времени...",
+      "noSlots": "Нет доступного времени на выбранную дату",
+      "selectDatePrompt": "Выберите дату для просмотра доступного времени"
+    },
+    "fields": {
+      "serviceLabel": "Услуга",
+      "servicePlaceholder": "Выберите услугу...",
+      "staffLabel": "Выберите специалиста",
+      "staffAny": "Любой специалист",
+      "customerNameLabel": "Ваше имя",
+      "customerNamePlaceholder": "Введите ваше имя",
+      "customerNameErrorRequired": "Пожалуйста, укажите ваше имя.",
+      "customerPhoneLabel": "Ваш телефон",
+      "customerPhonePlaceholder": "+7 (999) 999-99-99",
+      "customerPhoneErrorRequired": "Пожалуйста, укажите ваш номер телефона.",
+      "customerPhoneErrorInvalid": "Неверный формат номера телефона.",
+      "notesLabel": "Комментарий",
+      "notesPlaceholder": "Пожелания к записи",
+      "autofillMessage": "✓ Автоматически заполнено из профиля"
+    },
+    "buttons": {
+      "cancel": "Отмена",
+      "bookNow": "Записаться",
+      "submitting": "Создание..."
+    },
+    "messages": {
+      "errorSlotTaken": "Выбранное время недоступно. Выберите другое время.",
+      "errorGeneric": "Не удалось создать запись.",
+      "errorLoading": "Ошибка загрузки.",
+      "errorServiceNotFound": "Услуга не найдена.",
+      "errorContext": "Ошибка инициализации контекстов.",
+      "selectTimeRequired": "Пожалуйста, выберите время для записи.",
+      "privacyNotice": "Данные защищены и не передаются третьим лицам.",
+      "selectServicePrompt": "Пожалуйста, выберите услугу, чтобы продолжить."
+    }
+  },
+    "SalonAnalyticsPage": {
+      "header": {
+        "title": "Аналитика Услуг",
+        "subtitle": "Просматривайте доходы и популярность услуг по месяцам."
+      },
+      "exportButton": "Экспорт в Excel",
+      "allYear": "Весь год",
+      "loading": "Загрузка данных...",
+      "emptyState": {
+        "title": "Нет данных для отображения",
+        "description": "За {year} год не найдено ни одной завершенной услуги."
+      },
+      "table": {
+        "serviceName": "Наименование услуги",
+        "servicePrice": "Цена (руб.)",
+        "yearlyCount": "Кол-во за год",
+        "monthlyPeriods": "Продажи по месяцам",
+        "yearlyTotal": "Итого за год (руб.)",
+        "grandTotal": "Общая сумма дохода",
+        "details": "Детали"
+      },
+      "ratingByQuantityTitle": "Рейтинг по количеству",
+      "ratingByProfitTitle": "Рейтинг по доходу",
+      "pcs": "шт.",
+      "noDataForPeriod": "Нет данных за выбранный период.",
+      "months": {
+        "short": {
+          "jan": "Янв",
+          "feb": "Фев",
+          "mar": "Мар",
+          "apr": "Апр",
+          "may": "Май",
+          "jun": "Июн",
+          "jul": "Июл",
+          "aug": "Авг",
+          "sep": "Сен",
+          "oct": "Окт",
+          "nov": "Ноя",
+          "dec": "Дек"
+        },
+        "full": {
+          "jan": "Январь",
+          "feb": "Февраль",
+          "mar": "Март",
+          "apr": "Апрель",
+          "may": "Май",
+          "jun": "Июнь",
+          "jul": "Июль",
+          "aug": "Август",
+          "sep": "Сентябрь",
+          "oct": "Октябрь",
+          "nov": "Ноябрь",
+          "dec": "Декабрь"
+        }
+      }
+  }
+}
