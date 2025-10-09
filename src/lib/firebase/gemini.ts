@@ -69,6 +69,9 @@ export const analyzeAndStoreFaceHealth = async (userId: string, file: File): Pro
         "recommendations": ["string"]
     }
     ВАЖНО: Пиши только по русски.
+    ВАЖНО: recommendations должен быть массивом строк.
+    ВАЖНО: Пиши немного и по сути.
+    ВАЖНО: в skinCondition, eyeCondition, stressLevel, mood, fatigue описывай 1 - 3.
     Не добавляй в свой ответ ничего, кроме этого JSON-объекта(всегда придерживайся этой структуры). Никакого текста до или после, никаких markdown-блоков.
     `;
 
