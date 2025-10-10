@@ -7,7 +7,8 @@ import {
    BlogAdminProvider,
    DatabaseProvider,
    UserProvider,
-   GeminiProvider
+   GeminiProvider,
+   NotesProvider
   } from '@/contexts';
 
 export function Providers({ children }: { children: ReactNode }) {
@@ -17,7 +18,9 @@ export function Providers({ children }: { children: ReactNode }) {
               <AdminProvider>
                 <BlogAdminProvider>
                   <GeminiProvider>
-                    {children}
+                    <NotesProvider>
+                      {children}
+                    </NotesProvider>
                     </GeminiProvider>
                 </BlogAdminProvider>
               </AdminProvider>

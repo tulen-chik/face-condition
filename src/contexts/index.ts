@@ -5,3 +5,4 @@ export { DatabaseProvider,useDatabase } from './DatabaseContext';
 export { GeminiProvider,useGemini } from './GeminiContext';
 
 export { UserProvider,useUser } from './UserContext';
+export { NotesProvider,useNotes } from './NotesContex';

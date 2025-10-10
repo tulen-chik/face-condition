@@ -77,3 +77,21 @@ export const blogPostSchema = z.object({
     keywords: z.array(z.string()).optional(),
   }).optional(),
 });
+
+export const enhancedImageSchema = z.object({
+  id: z.string(),
+  originalAnalysisId: z.string(),
+  userId: z.string(),
+  imageUrl: z.string().url(),
+  storagePath: z.string(),
+  createdAt: z.string().datetime(),
+});
+
+export const noteSchema = z.object({
+  id: z.string(),
+  userId: z.string(),
+  title: z.string().min(1, "Заголовок не может быть пустым"),
+  content: z.string().min(1, "Содержимое не может быть пустым"),
+  day: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "День должен быть в формате YYYY-MM-DD"), // <-- ДОБАВЛЕНО
+  createdAt: z.string().datetime(),
+});

@@ -6,9 +6,11 @@ import {
   analyzeAndStoreFaceHealth, 
   deleteHealthAnalysis,
   getWeeklyHealthSummary, // <-- Импортируем новую функцию
-  chatWithHealthAI,       // <-- Импортируем новую функцию
+  chatWithHealthAI,
+  generateAndStoreEnhancedImage,
+  getEnhancedImagesForUser,       // <-- Импортируем новую функцию
 } from '@/lib/firebase/gemini'; // Укажите правильный путь
-import type { HealthAnalysisRecord } from '@/types/health';
+import type { EnhancedImageRecord, HealthAnalysisRecord } from '@/types/health';
 import { useUser } from './UserContext';
 
 // Определяем тип для истории чата для большей строгости
@@ -22,32 +24,42 @@ interface GeminiContextType {
   loading: boolean;
   error: Error | null;
   analyzeHealthFromFace: (file: File) => Promise<void>;
+  enhancedImages: EnhancedImageRecord[];
   deleteAnalysis: (analysisId: string, storagePath: string) => Promise<void>;
   fetchAnalyses: () => Promise<void>;
   // --- Новые методы ---
   getWeeklySummary: () => Promise<string>;
   sendChatMessage: (message: string, history: ChatMessage[]) => Promise<string>;
   getAnalysesForLastWeek: () => Promise<HealthAnalysisRecord[]>;
+  generateEnhancedImage: (analysis: HealthAnalysisRecord) => Promise<void>;
+  // getEnhancedImagesForUser: (userId: string) => Promise<EnhancedImageRecord[]>;
 }
 
 const GeminiContext = createContext<GeminiContextType | null>(null);
 
 export const GeminiProvider = ({ children }: { children: React.ReactNode }) => {
   const [analyses, setAnalyses] = useState<HealthAnalysisRecord[]>([]);
+  const [enhancedImages, setEnhancedImages] = useState<EnhancedImageRecord[]>([]); // <-- ДОБАВЛЕНО: Новое состояние
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
   const { currentUser } = useUser();
 
+  // ИЗМЕНЕНО: Функция теперь загружает анализы и улучшенные фото раздельно, но параллельно
   const fetchAnalyses = useCallback(async () => {
     if (!currentUser) return;
 
     setLoading(true);
     setError(null);
     try {
-      const userAnalyses = await getAnalysesForUser(currentUser.userId);
+      // Запускаем оба запроса одновременно для эффективности
+      const [userAnalyses, userEnhancedImages] = await Promise.all([
+        getAnalysesForUser(currentUser.userId),
+        getEnhancedImagesForUser(currentUser.userId)
+      ]);
       setAnalyses(userAnalyses);
+      setEnhancedImages(userEnhancedImages);
     } catch (err) {
-      setError(err instanceof Error ? err : new Error('Failed to fetch analyses'));
+      setError(err instanceof Error ? err : new Error('Failed to fetch data'));
     } finally {
       setLoading(false);
     }
@@ -57,16 +69,14 @@ export const GeminiProvider = ({ children }: { children: React.ReactNode }) => {
     if (currentUser) {
       fetchAnalyses();
     } else {
+      // Очищаем оба состояния при выходе
       setAnalyses([]);
+      setEnhancedImages([]);
     }
   }, [currentUser, fetchAnalyses]);
 
   const analyzeHealthFromFace = useCallback(async (file: File) => {
-    if (!currentUser) {
-      const err = new Error('User is not authenticated');
-      setError(err);
-      throw err;
-    }
+    if (!currentUser) throw new Error('User is not authenticated');
 
     setLoading(true);
     setError(null);
@@ -81,12 +91,32 @@ export const GeminiProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, [currentUser]);
 
+  const generateEnhancedImage = useCallback(async (analysis: HealthAnalysisRecord) => {
+    if (!currentUser) throw new Error('User is not authenticated');
+    
+    setLoading(true);
+    setError(null);
+    try {
+      const newEnhancedImageRecord = await generateAndStoreEnhancedImage(analysis);
+      // Добавляем новую запись только в состояние enhancedImages
+      setEnhancedImages(prev => [newEnhancedImageRecord, ...prev]);
+    } catch (err) {
+      const error = err instanceof Error ? err : new Error('Failed to generate enhanced image');
+      setError(error);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  }, [currentUser]);
+
   const deleteAnalysis = useCallback(async (analysisId: string, storagePath: string) => {
     setLoading(true);
     setError(null);
     try {
       await deleteHealthAnalysis(analysisId, storagePath);
+      // Удаляем из обоих списков
       setAnalyses(prev => prev.filter(a => a.id !== analysisId));
+      setEnhancedImages(prev => prev.filter(img => img.originalAnalysisId !== analysisId));
     } catch (err) {
       setError(err instanceof Error ? err : new Error('Failed to delete analysis'));
       throw err;
@@ -149,10 +179,13 @@ export const GeminiProvider = ({ children }: { children: React.ReactNode }) => {
         analyses,
         loading,
         error,
+        enhancedImages,
         analyzeHealthFromFace,
         getAnalysesForLastWeek,
         deleteAnalysis,
         fetchAnalyses,
+        generateEnhancedImage,
+        // getEnhancedImagesForUser,
         getWeeklySummary, // <-- Добавляем в провайдер
         sendChatMessage,  // <-- Добавляем в провайдер
       }}

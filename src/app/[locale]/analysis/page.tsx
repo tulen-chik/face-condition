@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useGemini } from '@/contexts/GeminiContext';
 import { useUser } from '@/contexts/UserContext';
 // Import the icon with an alias to prevent name collision
@@ -24,8 +24,17 @@ export default function AnalysisPage() {
 
   const [analysisData, setAnalysisData] = useState<HealthAnalysisRecord[]>([]);
   const [summary, setSummary] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchData = async (): Promise<void> => {
+      const data = await getAnalysesForLastWeek();
+      setAnalysisData(data);
+      setIsLoading(false);
+    };
+    fetchData();
+  }, [currentUser]);
 
   const handleFetchData = async () => {
     setIsLoading(true);
@@ -34,15 +43,6 @@ export default function AnalysisPage() {
     setAnalysisData([]);
 
     try {
-      const data = await getAnalysesForLastWeek();
-      if (data.length === 0) {
-        setSummary("За последнюю неделю нет данных для анализа. Добавьте хотя бы одну запись, чтобы получить сводку и графики.");
-        setAnalysisData([]);
-        setIsLoading(false); // Stop loading if no data
-        return;
-      }
-      setAnalysisData(data);
-
       const summaryResult = await getWeeklySummary();
       setSummary(summaryResult);
 

@@ -21,3 +21,12 @@ export interface HealthAnalysisRecord extends HealthAnalysis {
   storagePath: string;
   createdAt: string;
 }
+
+export type EnhancedImageRecord = {
+  id: string; // Должен совпадать с ID оригинального анализа
+  originalAnalysisId: string;
+  userId: string;
+  imageUrl: string;
+  storagePath: string;
+  createdAt: string; // ISO 8601 date string
+};

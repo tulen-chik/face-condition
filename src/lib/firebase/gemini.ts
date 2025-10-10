@@ -1,9 +1,9 @@
 // Предполагаемый путь: src/lib/health.ts
 
-import { HealthAnalysisRecord, HealthAnalysis } from "@/types/health";
+import { HealthAnalysisRecord, HealthAnalysis, EnhancedImageRecord } from "@/types/health";
 import { getStorage, ref as storageRef, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
-import { healthAnalysisSchema } from "./schemas";
-import { equalTo, get, orderByChild, query, ref as databaseRef } from "firebase/database";
+import { enhancedImageSchema, healthAnalysisSchema } from "./schemas";
+import { equalTo, get, orderByChild, query, ref as databaseRef, remove } from "firebase/database";
 import { db } from "./init";
 import { createOperation, deleteOperation } from "./crud";
 import { z } from "zod";
@@ -15,6 +15,34 @@ const YOUR_SITE_NAME = 'Health Face Analyzer';
 
 if (!OPENROUTER_API_KEY) {
   throw new Error('OPENROUTER_API_KEY не найден. Добавьте его в .env.local');
+}
+
+function dataUrlToBlob(dataUrl: string): Blob {
+  const arr = dataUrl.split(',');
+  const mimeMatch = arr[0].match(/:(.*?);/);
+  if (!mimeMatch) {
+      throw new Error("Invalid data URL format");
+  }
+  const mime = mimeMatch[1];
+  const bstr = atob(arr[1]);
+  let n = bstr.length;
+  const u8arr = new Uint8Array(n);
+  while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+  }
+  return new Blob([u8arr], { type: mime });
+}
+
+async function imageUrlToBase64(url: string): Promise<string> {
+  const response = await fetch(url);
+  if (!response.ok) throw new Error(`Failed to fetch image from URL: ${response.statusText}`);
+  const blob = await response.blob();
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => resolve(reader.result as string);
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
 }
 
 // --- Вспомогательная функция (без изменений) ---
@@ -170,30 +198,169 @@ export const analyzeAndStoreFaceHealth = async (userId: string, file: File): Pro
 export const deleteHealthAnalysis = async (analysisId: string, storagePath: string): Promise<void> => {
   try {
     const storage = getStorage();
+
+    // 1. Удаление оригинального изображения и его записи в БД
     const imageRef = storageRef(storage, storagePath);
-    const deleteImagePromise = deleteObject(imageRef);
-    const deleteDbRecordPromise = deleteOperation(`healthAnalyses/${analysisId}`);
-    await Promise.all([deleteImagePromise, deleteDbRecordPromise]);
-    console.log(`Анализ ${analysisId} и связанное изображение успешно удалены.`);
+    await deleteObject(imageRef);
+    await deleteOperation(`healthAnalyses/${analysisId}`);
+
+    // 2. Поиск и удаление связанного улучшенного изображения и его записи
+    const enhancedImageRef = databaseRef(db, `enhancedImages/${analysisId}`);
+    const enhancedImageSnap = await get(enhancedImageRef);
+
+    if (enhancedImageSnap.exists()) {
+        const enhancedRecord = enhancedImageSnap.val() as Omit<EnhancedImageRecord, 'id'>;
+        const enhancedImageStorageRef = storageRef(storage, enhancedRecord.storagePath);
+        
+        // Выполняем удаление последовательно
+        await deleteObject(enhancedImageStorageRef);
+        await remove(enhancedImageRef);
+    }
+
+    console.log(`Анализ ${analysisId} и все связанные данные успешно удалены.`);
   } catch (error) {
     console.error("Ошибка при удалении анализа:", error);
-    throw new Error("Не удалось удалить анализ и/или изображение.");
+    throw new Error("Не удалось удалить анализ и/или связанные изображения.");
   }
 };
+
+
 
 /**
  * Получает все записи анализов для пользователя (без изменений)
  */
 export const getAnalysesForUser = async (userId: string): Promise<HealthAnalysisRecord[]> => {
-    const analysesRef = query(databaseRef(db, 'healthAnalyses'), orderByChild('userId'), equalTo(userId));
-    const snapshot = await get(analysesRef);
+  const analysesRef = query(databaseRef(db, 'healthAnalyses'), orderByChild('userId'), equalTo(userId));
+  const snapshot = await get(analysesRef);
+  if (!snapshot.exists()) return [];
+  const records = snapshot.val() as Record<string, Omit<HealthAnalysisRecord, 'id'>>;
+  return Object.entries(records).map(([id, data]) => ({ id, ...data }));
+};
 
+export const getEnhancedImagesForUser = async (userId: string): Promise<EnhancedImageRecord[]> => {
+  // 1. Создаем запрос к базе данных в коллекции 'enhancedImages'
+  const imagesRef = query(
+    databaseRef(db, 'enhancedImages'), 
+    orderByChild('userId'), 
+    equalTo(userId)
+  );
+
+  try {
+    // 2. Выполняем запрос
+    const snapshot = await get(imagesRef);
+
+    // 3. Если данных нет, возвращаем пустой массив
     if (!snapshot.exists()) {
-        return [];
+      return [];
     }
 
-    const records = snapshot.val() as Record<string, Omit<HealthAnalysisRecord, 'id'>>;
-    return Object.entries(records).map(([id, data]) => ({ id, ...data }));
+    // 4. Преобразуем полученный объект в массив записей
+    const records = snapshot.val() as Record<string, Omit<EnhancedImageRecord, 'id'>>;
+    const results: EnhancedImageRecord[] = Object.entries(records).map(([id, data]) => ({
+      id,
+      ...data,
+    }));
+
+    // 5. Сортируем результаты по дате создания (от новых к старым) для удобства
+    return results.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+
+  } catch (error) {
+    console.error("Ошибка при получении улучшенных изображений:", error);
+    throw new Error("Не удалось получить список улучшенных изображений.");
+  }
+};
+export const generateAndStoreEnhancedImage = async (analysisRecord: HealthAnalysisRecord): Promise<EnhancedImageRecord> => {
+  try {
+    console.log(`Запуск улучшения для анализа: ${analysisRecord.id}`);
+    const recommendationsText = analysisRecord.recommendations.join(' ');
+
+    // --- ✅ УЛУЧШЕННЫЙ ПРОМПТ ---
+    const systemPrompt = `You are a helpful and skilled digital artist specializing in natural photo retouching. Your task is to generate an enhanced version of a person's photo based on a set of health recommendations.`;
+
+    const userPrompt = `
+    Generate a new, realistic image based on the one I provide.
+    Apply subtle improvements to the person's face according to these recommendations: "${recommendationsText}".
+
+    The goal is to show how the person would look healthier and more rested.
+    Key rules:
+    1.  It MUST be the same person. Do not change their core facial features or identity.
+    2.  The result must look like a real photograph, not an illustration.
+    3.  Make the skin look clearer, reduce signs of fatigue around the eyes, and give a more positive, rested expression.
+    `;
+
+    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
+        "HTTP-Referer": YOUR_SITE_URL,
+        "X-Title": YOUR_SITE_NAME,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        "model": "google/gemini-2.5-flash-image",
+        "messages": [
+          { "role": "system", "content": systemPrompt },
+          {
+            "role": "user",
+            "content": [
+              { "type": "text", "text": userPrompt },
+              { "type": "image_url", "image_url": { "url": analysisRecord.imageUrl } }
+            ]
+          }
+        ],
+        "modalities": ["image", "text"]
+      })
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error("Ошибка от OpenRouter API:", errorData);
+      throw new Error(`Ошибка API: ${response.statusText}`);
+    }
+
+    const result = await response.json();
+    const message = result.choices?.[0]?.message;
+    const enhancedImageDataUrl = message?.images?.[0]?.image_url?.url;
+
+    if (!enhancedImageDataUrl) {
+      // ✅ УЛУЧШЕННАЯ ОТЛАДКА: Теперь мы логируем и текстовый ответ модели.
+      const textResponse = message?.content || "No text content received.";
+      console.error("API не вернул изображение. Текстовый ответ от AI:", textResponse);
+      console.error("Полный ответ от API:", result); // Логируем весь объект для анализа
+      throw new Error('ИИ не вернул изображение.');
+    }
+
+    // --- Логика сохранения файла и записи в БД (без изменений) ---
+    const storage = getStorage();
+    const enhancedImageBlob = dataUrlToBlob(enhancedImageDataUrl);
+    const storagePath = `enhanced-images/${analysisRecord.userId}/${analysisRecord.id}-enhanced.png`;
+    const sref = storageRef(storage, storagePath);
+
+    console.log(`Загрузка улучшенного изображения в: ${storagePath}`);
+    await uploadBytes(sref, enhancedImageBlob);
+    const imageUrl = await getDownloadURL(sref);
+    console.log(`Изображение успешно загружено: ${imageUrl}`);
+
+    const recordToSave: Omit<EnhancedImageRecord, 'id'> = {
+      originalAnalysisId: analysisRecord.id,
+      userId: analysisRecord.userId,
+      imageUrl,
+      storagePath,
+      createdAt: new Date().toISOString(),
+    };
+
+    const recordId = analysisRecord.id;
+    await createOperation(`enhancedImages/${recordId}`, recordToSave, enhancedImageSchema.omit({ id: true }));
+
+    const finalRecord: EnhancedImageRecord = { id: recordId, ...recordToSave };
+    console.log("Запись об улучшенном изображении успешно создана в БД.");
+
+    return finalRecord;
+
+  } catch (error) {
+    console.error("Ошибка в процессе создания улучшенного изображения:", error);
+    throw new Error("Не удалось сгенерировать и сохранить улучшенное изображение.");
+  }
 };
 
 /**
