@@ -1,5 +1,5 @@
 'use client';
-import { createContext, useCallback, useContext, useEffect,useRef,useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 
 import { authService } from '@/lib/firebase/auth';
 import { userOperations } from '@/lib/firebase/database';
@@ -8,13 +8,17 @@ import { useDatabase } from './DatabaseContext';
 
 import type { User } from '@/types/database';
 
+// Определяем возможные значения для пола для удобства
+type Gender = 'male' | 'female' | 'other' | 'prefer_not_to_say';
+
 interface UserContextType {
   currentUser: (User & { userId: string }) | null;
   firebaseUser: any | null;
   loading: boolean;
   error: Error | null;
   login: (email: string, password: string) => Promise<void>;
-  register: (email: string, password: string, displayName: string) => Promise<void>;
+  // Обновляем сигнатуру функции register, чтобы принимать новые поля
+  register: (email: string, password: string, displayName: string, age?: number, gender?: Gender) => Promise<void>;
   logout: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
   updateProfile: (displayName?: string, photoURL?: string) => Promise<void>;
@@ -24,6 +28,7 @@ interface UserContextType {
   loginWithGoogle: () => Promise<void>;
   getUserByEmail: (email: string) => Promise<User | null>;
   getUserById: (userId: string) => Promise<User | null>;
+  updateUserData: (data: Partial<Omit<User, 'id'>>) => Promise<void>;
 }
 
 const UserContext = createContext<UserContextType | null>(null);
@@ -150,23 +155,24 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     const checkRedirectResult = async () => {
       try {
         console.log('Checking for redirect result...');
-        // Проверяем результат redirect аутентификации
         const redirectResult = await authService.getRedirectResult();
         if (redirectResult) {
           console.log('Redirect result found:', redirectResult);
           const { user, name } = redirectResult;
           setFirebaseUser(user);
           
-          // Create or update user in database
           const userData = await userOperations.read(user.uid);
           if (!userData) {
             console.log('Creating new user from Google auth...');
+            // Добавляем age и gender при создании пользователя
             await userOperations.create(user.uid, {
               email: user.email || '',
               displayName: name,
+              age: undefined, // <-- ДОБАВЛЕНО
+              gender: undefined, // <-- ДОБАВЛЕНО
               avatarUrl: '',
               avatarStoragePath: '',
-                createdAt: new Date().toISOString(),
+              createdAt: new Date().toISOString(),
               role: 'user',
               settings: {
                 language: 'en',
@@ -180,23 +186,20 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
           await refreshUser(user.uid);
         } else {
           console.log('No redirect result found');
-          // Если нет redirect результата, сбрасываем loading
           setLoading(false);
         }
       } catch (error) {
         console.error('Error checking redirect result:', error);
-        // В случае ошибки также сбрасываем loading
         setLoading(false);
       }
     };
 
-    // Добавляем таймаут для сброса loading, если что-то пошло не так
     timeoutRef.current = setTimeout(() => {
       if (loading) {
         console.log('Loading timeout reached, resetting loading state');
         setLoading(false);
       }
-    }, 10000); // 10 секунд таймаут
+    }, 10000);
 
     checkRedirectResult();
 
@@ -206,7 +209,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         clearTimeout(timeoutRef.current);
       }
     };
-  }, [refreshUser]);
+  }, [refreshUser, loadUserFromCache]);
 
   const login = async (email: string, password: string) => {
     try {
@@ -218,13 +221,41 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const register = async (email: string, password: string, displayName: string) => {
+  // Обновленная функция регистрации с новыми полями
+  const register = async (
+    email: string,
+    password: string,
+    displayName: string,
+    age?: number,
+    gender?: Gender
+  ) => {
     try {
       setError(null);
-      await authService.register(email, password, displayName);
+      setLoading(true);
+      const newFirebaseUser = await authService.register(email, password, displayName);
+
+      if (newFirebaseUser) {
+        await userOperations.create(newFirebaseUser.uid, {
+          email,
+          displayName,
+          age: age || 18, // <-- ДОБАВЛЕНО
+          gender: gender || "prefer_not_to_say", // <-- ДОБАВЛЕНО
+          avatarUrl: '',
+          avatarStoragePath: '',
+          createdAt: new Date().toISOString(),
+          role: 'user',
+          settings: {
+            language: 'en',
+            notifications: true
+          }
+        });
+        await refreshUser(newFirebaseUser.uid);
+      }
     } catch (err) {
       setError(err instanceof Error ? err : new Error('Failed to register'));
       throw err;
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -259,6 +290,26 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     } catch (err) {
       setError(err instanceof Error ? err : new Error('Failed to update profile'));
       throw err;
+    }
+  };
+
+  const updateUserData = async (data: Partial<Omit<User, 'id'>>) => {
+    if (!currentUser) {
+      throw new Error("User is not authenticated.");
+    }
+    try {
+      setError(null);
+      setLoading(true);
+      // 1. Обновляем данные в базе данных (Firestore/RTDB)
+      await userOperations.update(currentUser.userId, data);
+      // 2. Обновляем локальный кеш и состояние
+      await refreshUser(currentUser.userId);
+    } catch (err) {
+      const error = err instanceof Error ? err : new Error('Failed to update user data');
+      setError(error);
+      throw error;
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -305,12 +356,8 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
       console.log('Attempting Google login...');
       result = await authService.loginWithGoogle();
       
-      // Если результат null, значит используется redirect метод
       if (result === null) {
         console.log('Google login using redirect method...');
-        // При redirect методе пользователь будет перенаправлен на страницу аутентификации
-        // Результат будет обработан в useEffect ниже
-        // Не сбрасываем loading, так как идет redirect
         return;
       }
       
@@ -318,13 +365,15 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
       const { user, name } = result;
       setFirebaseUser(user);
       
-      // Create or update user in database
       const userData = await userOperations.read(user.uid);
       if (!userData) {
         console.log('Creating new user from Google popup auth...');
+        // Добавляем age и gender при создании пользователя
         await userOperations.create(user.uid, {
           email: user.email || '',
           displayName: name,
+          age: 18, // <-- ДОБАВЛЕНО
+          gender: "prefer_not_to_say", // <-- ДОБАВЛЕНО
           avatarUrl: '',
           avatarStoragePath: '',
           createdAt: new Date().toISOString(),
@@ -373,7 +422,8 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         deleteAccount,
         loginWithGoogle,
         getUserByEmail,
-        getUserById
+        getUserById,
+        updateUserData,
       }}
     >
       {children}
@@ -387,4 +437,4 @@ export const useUser = () => {
     throw new Error('useUser must be used within a UserProvider');
   }
   return context;
-}; 
+};

@@ -27,6 +27,7 @@ interface GeminiContextType {
   // --- Новые методы ---
   getWeeklySummary: () => Promise<string>;
   sendChatMessage: (message: string, history: ChatMessage[]) => Promise<string>;
+  getAnalysesForLastWeek: () => Promise<HealthAnalysisRecord[]>;
 }
 
 const GeminiContext = createContext<GeminiContextType | null>(null);
@@ -127,6 +128,20 @@ export const GeminiProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, []);
 
+  const getAnalysesForLastWeek = async (): Promise<HealthAnalysisRecord[]> => {
+    if (!currentUser) {
+      throw new Error("User not authenticated.");
+    }
+    const allAnalyses = await getAnalysesForUser(currentUser.userId);
+    const oneWeekAgo = new Date();
+    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+  
+    // Filter for the last week and sort by date
+    return allAnalyses
+      .filter(a => new Date(a.createdAt) >= oneWeekAgo)
+      .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+  };
+
 
   return (
     <GeminiContext.Provider
@@ -135,6 +150,7 @@ export const GeminiProvider = ({ children }: { children: React.ReactNode }) => {
         loading,
         error,
         analyzeHealthFromFace,
+        getAnalysesForLastWeek,
         deleteAnalysis,
         fetchAnalyses,
         getWeeklySummary, // <-- Добавляем в провайдер

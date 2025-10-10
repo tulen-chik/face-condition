@@ -7,6 +7,8 @@ export const userSchema = z.object({
   avatarStoragePath: z.string().optional(),
   createdAt: z.string(),
   role: z.enum(['admin', 'user']),
+  gender: z.enum(['male', 'female', 'other', 'prefer_not_to_say']).optional(), // <-- ДОБАВЛЕНО
+  age: z.number().int().positive().optional(), // <-- ДОБАВЛЕНО
   settings: z.object({
     language: z.string(),
     notifications: z.boolean()
@@ -21,12 +23,17 @@ export const healthAnalysisSchema = z.object({
   storagePath: z.string(),
   createdAt: z.string().datetime(),
 
-  // --- НОВЫЕ Поля из анализа Gemini ---
+  // --- Поля из анализа AI с численными оценками ---
   skinCondition: z.string(),
+  skinConditionScore: z.number(),
   eyeCondition: z.string(),
+  eyeConditionScore: z.number(),
   stressLevel: z.string(),
+  stressLevelScore: z.number(),
   mood: z.string(),
+  moodScore: z.number(),
   fatigue: z.string(),
+  fatigueScore: z.number(),
   diagnosis: z.string(),
   recommendations: z.array(z.string()),
 });

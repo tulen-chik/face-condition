@@ -35,6 +35,8 @@ export const authService = {
       displayName,
       avatarUrl: '',
       avatarStoragePath: '',
+      age: 18,
+      gender: "prefer_not_to_say",
       createdAt: new Date().toISOString(),
       role: 'user',
       settings: {

@@ -1,6 +1,6 @@
 "use client";
 
-import { HeartPulse, Menu, User, X, LogIn, UserPlus, CalendarDays, Paperclip, BrainCircuit, LogOut, } from 'lucide-react';
+import { HeartPulse, Menu, User, X, LogIn, UserPlus, CalendarDays, Paperclip, BrainCircuit, LogOut, MessageCircle, } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -52,6 +52,7 @@ export default function SiteHeader({ locale }: Props) {
     { href: `/${locale}/calendar`, label: "Анализ", icon: CalendarDays },
     { href: `/${locale}/blog`, label: "Статьи", icon: Paperclip },
     { href: `/${locale}/analysis`, label: "Аналитика", icon: BrainCircuit },
+    { href: `/${locale}/chat`, label: "Чат", icon: MessageCircle },
   ];
 
   const isActive = (href: string) => {

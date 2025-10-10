@@ -1,20 +1,23 @@
+// Предполагаемый путь: src/lib/health.ts
+
 import { HealthAnalysisRecord, HealthAnalysis } from "@/types/health";
 import { getStorage, ref as storageRef, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
-import { healthAnalysisSchema } from "./schemas"; // Предполагается, что у вас есть этот файл
+import { healthAnalysisSchema } from "./schemas";
 import { equalTo, get, orderByChild, query, ref as databaseRef } from "firebase/database";
-import { db } from "./init"; // Предполагается, что у вас есть этот файл
-import { createOperation, deleteOperation } from "./crud"; // Предполагается, что у вас есть этот файл
+import { db } from "./init";
+import { createOperation, deleteOperation } from "./crud";
+import { z } from "zod";
 
-// --- 1. Получаем переменные окружения для OpenRouter ---
+// --- Переменные окружения (без изменений) ---
 const OPENROUTER_API_KEY = process.env.NEXT_PUBLIC_OPENROUTER_API_KEY;
 const YOUR_SITE_URL = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-const YOUR_SITE_NAME = 'Health Face Analyzer'; // Можете изменить на название вашего проекта
+const YOUR_SITE_NAME = 'Health Face Analyzer';
 
 if (!OPENROUTER_API_KEY) {
   throw new Error('OPENROUTER_API_KEY не найден. Добавьте его в .env.local');
 }
 
-// --- 2. Вспомогательная функция для конвертации File в Base64 Data URL ---
+// --- Вспомогательная функция (без изменений) ---
 async function fileToDataUrl(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -26,10 +29,7 @@ async function fileToDataUrl(file: File): Promise<string> {
   });
 }
 
-/**
- * Загружает изображение для анализа здоровья в Firebase Storage.
- * (Эта функция остается без изменений)
- */
+// --- uploadHealthImage (без изменений) ---
 export const uploadHealthImage = async (userId: string, file: File) => {
   const storage = getStorage();
   const id = `${Date.now()}-${file.name}`;
@@ -46,33 +46,59 @@ export const uploadHealthImage = async (userId: string, file: File) => {
  * Основная функция: анализирует изображение через OpenRouter, загружает его и сохраняет результат.
  */
 export const analyzeAndStoreFaceHealth = async (userId: string, file: File): Promise<HealthAnalysisRecord> => {
-  // Шаг 1: Загружаем изображение в Firebase Storage
   const { url, storagePath } = await uploadHealthImage(userId, file);
 
-  // --- Шаг 2: ВЫЗОВ API OPENROUTER ---
   let analysisResult: HealthAnalysis;
 
   try {
     console.log('Отправка запроса к OpenRouter API...');
 
-    const prompt = `
-    Проанализируй лицо человека на этом изображении на предмет видимых индикаторов состояния здоровья.
-    Основывайся ТОЛЬКО на визуальной информации.
-    Твой ответ должен быть валидным JSON-объектом со следующей структурой и ключами:
+    // --- УЛУЧШЕННЫЙ ПРОМПТ ---
+    const systemPrompt = `You are a highly precise health indicator analysis AI. Your task is to analyze a user's face from an image and return a structured JSON object. You must adhere strictly to the requested JSON format and data types. Do not add any explanatory text, markdown, or any characters outside of the JSON object in your response. Your analysis must be based solely on visual information from the image.`;
+
+    const userPrompt = `
+    Analyze the person's face in this image for visible health indicators.
+    Your response MUST be a single, valid JSON object with the exact structure and keys shown below.
+
+    The JSON structure MUST be:
     {
         "skinCondition": "string",
+        "skinConditionScore": number,
         "eyeCondition": "string",
+        "eyeConditionScore": number,
         "stressLevel": "string",
+        "stressLevelScore": number,
         "mood": "string",
+        "moodScore": number,
         "fatigue": "string",
+        "fatigueScore": number,
         "diagnosis": "string",
         "recommendations": ["string"]
     }
-    ВАЖНО: Пиши только по русски.
-    ВАЖНО: recommendations должен быть массивом строк.
-    ВАЖНО: Пиши немного и по сути.
-    ВАЖНО: в skinCondition, eyeCondition, stressLevel, mood, fatigue описывай 1 - 3.
-    Не добавляй в свой ответ ничего, кроме этого JSON-объекта(всегда придерживайся этой структуры). Никакого текста до или после, никаких markdown-блоков.
+
+    RULES:
+    1.  Language: All string values MUST be in Russian.
+    2.  Scores: Each "...Score" field MUST be an integer between 1 (very poor) and 10 (excellent). DO NOT use strings for numbers.
+    3.  Text Fields: For "skinCondition", "eyeCondition", "stressLevel", "mood", and "fatigue", provide a very brief description (1-3 Russian words).
+    4.  Recommendations: "recommendations" MUST be an array of strings.
+    5.  Diagnosis: "diagnosis" should be a short, non-medical summary of observations.
+    6.  Output: Your entire response must be ONLY the JSON object, without any extra text or markdown formatting like \`\`\`json.
+
+    Example of a valid response:
+    {
+        "skinCondition": "Ровный тон",
+        "skinConditionScore": 8,
+        "eyeCondition": "Ясные глаза",
+        "eyeConditionScore": 9,
+        "stressLevel": "Признаки напряжения",
+        "stressLevelScore": 5,
+        "mood": "Спокойное",
+        "moodScore": 7,
+        "fatigue": "Легкая усталость",
+        "fatigueScore": 6,
+        "diagnosis": "В целом здоровый вид, но заметны следы усталости.",
+        "recommendations": ["Постарайтесь лечь спать пораньше.", "Сделайте перерыв для отдыха глаз."]
+    }
     `;
 
     const imageUrlBase64 = await fileToDataUrl(file);
@@ -86,12 +112,13 @@ export const analyzeAndStoreFaceHealth = async (userId: string, file: File): Pro
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        "model": "google/gemini-2.5-flash-image-preview", // Модель с поддержкой анализа изображений
+        "model": "google/gemini-2.5-flash-image",
         "messages": [
+          { "role": "system", "content": systemPrompt }, // Добавлен системный промпт
           {
             "role": "user",
             "content": [
-              { "type": "text", "text": prompt },
+              { "type": "text", "text": userPrompt },
               { "type": "image_url", "image_url": { "url": imageUrlBase64 } }
             ]
           }
@@ -111,8 +138,9 @@ export const analyzeAndStoreFaceHealth = async (userId: string, file: File): Pro
     const cleanedJson = responseText.replace(/```json/g, '').replace(/```/g, '').trim();
     analysisResult = JSON.parse(cleanedJson);
 
-    if (!analysisResult.skinCondition || !analysisResult.diagnosis || !analysisResult.recommendations) {
-      throw new Error('Ответ API имеет неверную структуру.');
+    // Проверка остается полезной
+    if (!analysisResult.skinCondition || typeof analysisResult.skinConditionScore !== 'number' || !analysisResult.diagnosis || !analysisResult.recommendations) {
+      throw new Error('Ответ API имеет неверную структуру или отсутствуют числовые оценки.');
     }
 
   } catch (error) {
@@ -120,9 +148,7 @@ export const analyzeAndStoreFaceHealth = async (userId: string, file: File): Pro
     await deleteObject(storageRef(getStorage(), storagePath)).catch(e => console.error("Не удалось удалить изображение после ошибки API:", e));
     throw new Error("Не удалось проанализировать изображение с помощью AI.");
   }
-  // --- КОНЕЦ ВЫЗОВА API ---
 
-  // Шаг 3: Сохраняем результат в Realtime Database
   const analysisId = Date.now().toString();
   const recordToSave: Omit<HealthAnalysisRecord, 'id'> = {
     userId,
@@ -137,8 +163,9 @@ export const analyzeAndStoreFaceHealth = async (userId: string, file: File): Pro
   return { id: analysisId, ...recordToSave };
 };
 
+
 /**
- * Удаляет запись об анализе из Realtime Database и связанное изображение из Storage.
+ * Удаляет запись об анализе (без изменений)
  */
 export const deleteHealthAnalysis = async (analysisId: string, storagePath: string): Promise<void> => {
   try {
@@ -155,7 +182,7 @@ export const deleteHealthAnalysis = async (analysisId: string, storagePath: stri
 };
 
 /**
- * Получает все записи анализов для конкретного пользователя.
+ * Получает все записи анализов для пользователя (без изменений)
  */
 export const getAnalysesForUser = async (userId: string): Promise<HealthAnalysisRecord[]> => {
     const analysesRef = query(databaseRef(db, 'healthAnalyses'), orderByChild('userId'), equalTo(userId));
@@ -186,15 +213,25 @@ export const getWeeklyHealthSummary = async (userId: string): Promise<string> =>
   }
 
   const formattedData = recentAnalyses.map(a =>
-    `Дата: ${new Date(a.createdAt).toLocaleDateString('ru-RU')}, Общее наблюдение: ${a.diagnosis}, Уровень усталости: ${a.fatigue}, Настроение: ${a.mood}`
+    `Дата: ${new Date(a.createdAt).toLocaleString('ru-RU')}, Усталость: ${a.fatigue} (${a.fatigueScore}/10), Настроение: ${a.mood} (${a.moodScore}/10), Стресс: ${a.stressLevel} (${a.stressLevelScore}/10)`
   ).join('\n');
 
+  // --- УЛУЧШЕННЫЙ ПРОМПТ ---
   const prompt = `
-    Ты — внимательный ассистент по здоровью. Проанализируй следующие данные, полученные из визуального анализа фотографий пользователя за последнюю неделю.
-    Не давай медицинских советов или диагнозов. Твоя задача — выявить общие тенденции и дать ободряющую, легко читаемую сводку.
-    Данные для анализа:\n${formattedData}\n
-    Основываясь на этих данных, напиши краткую сводку (2-4 предложения). Обрати внимание на возможные изменения в уровне усталости или настроении.
-    Твой ответ должен быть в дружелюбном и поддерживающем тоне.
+    You are a caring health assistant. Your task is to analyze the following user data, which was derived from visual analysis of their photos over the last week.
+    Your goal is to identify general trends and provide a supportive, easy-to-read summary.
+
+    RULES:
+    1.  **DO NOT** give medical advice or diagnoses.
+    2.  **Focus on trends:** Analyze the dynamics of the scores. For example, mention if stress levels seem to be decreasing or if fatigue is consistently high.
+    3.  **Tone:** Your response must be in Russian, using a friendly, encouraging, and supportive tone.
+    4.  **Length:** Keep the summary concise (2-4 sentences).
+    5.  **Base your summary ONLY on the data provided.**
+
+    User's data for the last week:
+    ${formattedData}
+
+    Now, write the summary based on these rules.
   `;
 
   try {
@@ -208,7 +245,7 @@ export const getWeeklyHealthSummary = async (userId: string): Promise<string> =>
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          "model": "openai/gpt-3.5-turbo", // Для текста можно использовать модель попроще
+          "model": "deepseek/deepseek-chat",
           "messages": [{ "role": "user", "content": prompt }]
         })
       });
@@ -227,12 +264,15 @@ export const getWeeklyHealthSummary = async (userId: string): Promise<string> =>
  * Отправляет сообщение в чат с ИИ-ассистентом по здоровью через OpenRouter.
  */
 export const chatWithHealthAI = async (message: string, history: any[]): Promise<string> => {
+  // --- УЛУЧШЕННЫЙ СИСТЕМНЫЙ ПРОМПТ ---
   const systemPrompt = `
-    Ты — дружелюбный и эмпатичный ИИ-ассистент по здоровью.
-    Твоя главная задача — отвечать на общие вопросы о здоровом образе жизни, питании, сне и стрессе.
-    ВАЖНО: Ты НИКОГДА не должен ставить медицинские диагнозы, назначать лечение или давать прямые медицинские советы.
-    Если пользователь спрашивает о симптомах болезни или лечении, твой ответ ВСЕГДА должен включать рекомендацию обратиться к врачу.
-    Будь позитивным и поддерживающим.
+    You are a friendly and empathetic AI health assistant. Your primary role is to answer general questions about a healthy lifestyle, nutrition, sleep, and stress management.
+
+    **CRITICAL SAFETY INSTRUCTION:**
+    - You MUST NEVER provide medical diagnoses, prescribe treatments, or give direct medical advice. This is your most important rule.
+    - If a user asks about symptoms, diseases, medication, or treatment, you MUST ALWAYS decline to answer directly and strongly recommend consulting a healthcare professional. For example, say: "Я не могу давать медицинские советы. По этому вопросу лучше всего проконсультироваться с врачом."
+    - Your tone should always be positive, supportive, and encouraging.
+    - All your responses must be in Russian.
   `;
 
   const messages = [
@@ -252,7 +292,7 @@ export const chatWithHealthAI = async (message: string, history: any[]): Promise
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          "model": "openai/gpt-3.5-turbo",
+          "model": "deepseek/deepseek-chat",
           "messages": messages
         })
       });
