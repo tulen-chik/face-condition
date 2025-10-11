@@ -285,7 +285,7 @@ export const generateAndStoreEnhancedImage = async (analysisRecord: HealthAnalys
     Key rules:
     1.  It MUST be the same person. Do not change their core facial features or identity.
     2.  The result must look like a real photograph, not an illustration.
-    3.  Make the skin look clearer, reduce signs of fatigue around the eyes, and give a more positive, rested expression.
+    3.  Make the skin look ideally clear, remove signs of fatigue around the eyes.
     `;
 
     const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {

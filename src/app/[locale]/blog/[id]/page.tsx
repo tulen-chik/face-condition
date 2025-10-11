@@ -43,7 +43,7 @@ const NotFoundState = () => (
 export default function BlogPostPage() {
   // --- Business logic remains unchanged ---
   const params = useParams()
-  const slug = params.slug as string 
+  const slug = params.id as string 
 
   const { posts, categories, loading, loadAll } = useBlog();
 
@@ -54,9 +54,11 @@ export default function BlogPostPage() {
     if (!posts.length && !loading) {
       loadAll();
     }
+    console.log(posts)
   }, [loadAll, posts.length, loading]);
 
   const post = useMemo(() => {
+    console.log(slug)
     if (!slug || !posts.length) return null;
     return posts.find(p => p.slug === slug) || posts.find(p => p.id === slug);
   }, [slug, posts]);
@@ -150,16 +152,16 @@ export default function BlogPostPage() {
         {/* Article Content */}
         <section className="py-12">
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+            {/* <div className="grid grid-cols-1 lg:grid-cols-12 gap-12"> */}
               <motion.main className="lg:col-span-8" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }}>
                 <BlogContent content={post?.content as any[]} />
                 
-                <div className="mt-12 pt-8 border-t border-slate-200">
+                {/* <div className="mt-12 pt-8 border-t border-slate-200">
                   <h3 className="text-lg font-bold text-gray-900 mb-4">Теги:</h3>
                   <div className="flex flex-wrap gap-2">
                     {post?.tags.map((tag) => (<span key={tag} className="px-3 py-1 bg-slate-100 text-slate-700 rounded-full text-sm font-medium border border-slate-200">#{tag}</span>))}
                   </div>
-                </div>
+                </div> */}
                 
                 <div className="mt-8 pt-8 border-t border-slate-200">
                   <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -178,7 +180,7 @@ export default function BlogPostPage() {
                 </div>
               </motion.main>
               
-              <motion.aside className="lg:col-span-4" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, delay: 0.4 }}>
+              {/* <motion.aside className="lg:col-span-4" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, delay: 0.4 }}>
                 {relatedPosts.length > 0 && (
                   <div className="bg-white/80 backdrop-blur-lg border border-slate-200 rounded-2xl shadow-lg p-6 sticky top-24">
                     <h4 className="font-bold text-gray-900 mb-4 text-xl">Похожие статьи</h4>
@@ -198,8 +200,8 @@ export default function BlogPostPage() {
                     </div>
                   </div>
                 )}
-              </motion.aside>
-            </div>
+              </motion.aside> */}
+            {/* </div> */}
           </div>
         </section>
       </div>

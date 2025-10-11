@@ -62,7 +62,7 @@ const PostEditorModal = ({
     const defaultPost: Partial<BlogPost> = {
       title: '', slug: '', excerpt: '', content: [{ type: 'paragraph', content: '' }],
       authorId: authors[0]?.id || '', publishedAt: new Date().toISOString(), readTime: 5,
-      categoryId: categories[0]?.id || '', tags: [], image: '', featured: false, status: 'draft',
+      categoryId: categories[0]?.id || '', tags: [], image: '', featured: false, status: 'published',
       seo: { metaTitle: '', metaDescription: '', keywords: [] }
     };
     const initialData = initialPost ? JSON.parse(JSON.stringify(initialPost)) : {};

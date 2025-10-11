@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
+import { motion } from 'framer-motion';
 
 import { useUser } from '@/contexts/UserContext';
 
@@ -63,36 +65,53 @@ export default function SiteHeader({ locale }: Props) {
 
   return (
     <>
-      {/* --- REDESIGN: Light theme header with blur effect --- */}
       <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-lg text-gray-900 border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="h-16 flex items-center justify-between">
             {/* Logo */}
             <div className="flex items-center">
               <Link href={`/${locale}`} className="flex items-center space-x-3 group">
-                <div className="flex items-center justify-center w-10 h-10 rounded-full bg-white border border-slate-200 shadow-sm group-hover:border-[#009f5a] transition-colors">
-                  <HeartPulse className="w-6 h-6 text-[#009f5a]" />
-                </div>
-                <span className="text-xl font-bold text-gray-900">Sona</span>
+                <span className="text-xl font-bold text-gray-900"><Image src="/images/SONA.png" alt="Logo" width={100} height={100}/></span>
               </Link>
             </div>
 
-            {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center space-x-2">
-              {nav.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    isActive(item.href)
-                      ? 'bg-slate-100 text-[#009f5a]' // Active link
-                      : 'text-gray-600 hover:bg-slate-100 hover:text-gray-900'
-                  }`}
-                >
-                  <item.icon className="w-4 h-4 mr-2" />
-                  {item.label}
-                </Link>
-              ))}
+            {/* --- REDESIGN: Desktop Navigation with GREEN Highlight --- */}
+            <nav className="hidden md:flex items-center space-x-1 bg-slate-100 p-1 rounded-full">
+              {nav.map((item) => {
+                const active = isActive(item.href);
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={`relative px-2 py-1.5 rounded-full text-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#009f5a] ${
+                      active
+                        ? 'font-bold text-gray-900' // --- ИЗМЕНЕНИЕ 1: Сделали текст активной вкладки жирным
+                        : 'font-medium text-gray-600 hover:text-gray-900'
+                    }`}
+                  >
+                    {active && (
+                      <motion.div
+                        // --- ИЗМЕНЕНИЕ 2: Поменяли цвет фона и добавили тень-свечение ---
+                        className="absolute inset-0 bg-[#00ff90] rounded-full -z-10 shadow-lg shadow-[#00ff90]/40"
+                        layoutId="active-pill"
+                        transition={{
+                          type: 'spring',
+                          stiffness: 380,
+                          damping: 30,
+                        }}
+                      />
+                    )}
+                    
+                    <motion.div
+                      className="flex items-center px-3 py-1"
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <item.icon className="w-4 h-4 mr-2" />
+                      <span className="relative z-10">{item.label}</span>
+                    </motion.div>
+                  </Link>
+                );
+              })}
             </nav>
 
             {/* User buttons for desktop */}
@@ -149,7 +168,7 @@ export default function SiteHeader({ locale }: Props) {
         </div>
       </header>
 
-      {/* --- REDESIGN: Light theme mobile menu --- */}
+      {/* --- Mobile menu remains unchanged --- */}
       {isMenuVisible && (
         <div
           onClick={() => setIsMenuOpen(false)}
@@ -163,11 +182,10 @@ export default function SiteHeader({ locale }: Props) {
               isMenuOpen ? 'translate-x-0' : 'translate-x-full'
             }`}
           >
-            <div className="flex items-center justify-between p-4 border-b border-slate-200">
-              <div className="flex items-center space-x-2">
-                <HeartPulse className="w-6 h-6 text-[#009f5a]" />
-                <span className="text-xl font-bold text-gray-900">Sona</span>
-              </div>
+            <div className="flex items-center justify-between p-[13px] border-b border-slate-200">
+            <Link href={`/${locale}`} className="flex items-center space-x-3 group">
+                <span className="text-xl font-bold text-gray-900"><Image src="/images/SONA.png" alt="Logo" width={100} height={100}/></span>
+              </Link>
               <button
                 onClick={() => setIsMenuOpen(false)}
                 className="p-2 -mr-2 text-gray-500 hover:text-gray-900 rounded-lg transition-colors"

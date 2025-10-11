@@ -169,7 +169,7 @@ const WeekView = ({ selectedDate, setSelectedDate, daysWithNotes }: { selectedDa
                     >
                         <span className={`text-xs lg:text-sm uppercase ${isSelected ? 'text-gray-800' : 'text-gray-500'}`}>{isToday(day) ? 'СЕГОДНЯ' : day.toLocaleString('ru-RU', { weekday: 'short' })}</span>
                         <span className="text-xl lg:text-3xl font-semibold mt-1">{day.getDate()}</span>
-                        {hasNote && <div className={`w-1.5 h-1.5 lg:w-2 lg:h-2 rounded-full mt-1.5 ${isSelected ? 'bg-gray-900' : 'bg-gray-800'}`}></div>}
+                        {hasNote && <div className={`w-1.5 h-1.5 lg:w-2 lg:h-2 rounded-full mt-1.5 ${isSelected ? 'bg-white' : 'bg-[#00ff90]'}`}></div>}
                     </div>
                 );
             })}
