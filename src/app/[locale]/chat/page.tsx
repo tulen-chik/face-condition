@@ -3,12 +3,13 @@
 import { useState, useEffect, useRef } from 'react';
 import { useGemini } from '@/contexts/GeminiContext';
 import { useUser } from '@/contexts/UserContext';
-import { AlertCircle, SendHorizontal, Bot } from 'lucide-react';
+import { AlertCircle, SendHorizontal, Bot, MessageCircle } from 'lucide-react';
 
-// Определяем тип для сообщений в чате
+// --- Business logic remains unchanged ---
 interface ChatMessage {
   role: 'user' | 'model';
   parts: { text: string }[];
+  isError?: boolean;
 }
 
 export default function ChatPage() {
@@ -20,7 +21,6 @@ export default function ChatPage() {
   const [chatLoading, setChatLoading] = useState(false);
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
-  // Автоматическая прокрутка чата вниз
   useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
@@ -45,7 +45,8 @@ export default function ChatPage() {
     } catch (error) {
       const errorMessage: ChatMessage = { 
         role: 'model', 
-        parts: [{ text: `Произошла ошибка: ${error instanceof Error ? error.message : 'Не удалось получить ответ.'}` }] 
+        parts: [{ text: `Произошла ошибка: ${error instanceof Error ? error.message : 'Не удалось получить ответ.'}` }],
+        isError: true
       };
       setChatHistory(prev => [...prev, errorMessage]);
     } finally {
@@ -53,71 +54,85 @@ export default function ChatPage() {
     }
   };
 
-  // Блок проверки авторизации
+  // --- REDESIGNED UI ---
+
   if (!currentUser) {
     return (
-      <div className="relative min-h-screen overflow-hidden bg-black p-4 sm:p-8 text-white font-sans flex items-center justify-center">
+      <div className="bg-slate-50 min-h-screen text-gray-800 font-sans p-4 sm:p-6 flex items-center justify-center">
         <div className="text-center max-w-md">
-          <AlertCircle className="mx-auto h-12 w-12 text-sky-500 mb-4" />
-          <h1 className="text-2xl font-bold mb-2 text-gray-100">Требуется авторизация</h1>
-          <p className="text-gray-400">
-            Пожалуйста, войдите в свой аккаунт, чтобы начать чат с ИИ-ассистентом.
-          </p>
+          <AlertCircle className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+          <h1 className="text-2xl font-bold mb-2">Требуется авторизация</h1>
+          <p className="text-gray-500">Пожалуйста, войдите в свой аккаунт, чтобы начать чат с ИИ-ассистентом.</p>
         </div>
       </div>
     );
   }
 
-  // Основной контент страницы
   return (
-    <div className="relative min-h-screen overflow-hidden bg-black p-4 sm:p-8 text-white font-sans flex flex-col">
-      <div className="relative max-w-4xl w-full mx-auto z-10 flex flex-col flex-grow">
-        <header className="mb-6">
-          <h1 className="text-3xl sm:text-4xl font-bold flex items-center text-gray-100">
-            <Bot className="mr-4 h-9 w-9 sm:h-10 sm:w-10 text-sky-400" />
-            ИИ-Ассистент
-          </h1>
-          <p className="text-gray-400 mt-2">Задайте любой вопрос о вашем здоровье, питании или тренировках.</p>
+    <div className="relative min-h-screen overflow-hidden bg-slate-50 p-4 sm:p-8 text-gray-900 font-sans flex flex-col">
+      {/* Decorative elements */}
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#45969b]/10 rounded-full filter blur-3xl opacity-70 animate-pulse"></div>
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#00ff90]/10 rounded-full filter blur-3xl opacity-70 animate-pulse animation-delay-4000"></div>
+
+      <div className="relative max-w-4xl w-full mx-auto z-10 flex flex-col flex-grow" style={{ height: 'calc(100vh - 4rem)' }}>
+        <header className="mb-6 flex-shrink-0">
+            <div className="flex items-center">
+                <div className="p-2 rounded-full bg-white/80 border border-slate-200 shadow-md mr-4">
+                    <Bot className="h-10 w-10 text-[#009f5a]" />
+                </div>
+                <div>
+                    <h1 className="text-4xl font-bold text-gray-900">ИИ-Ассистент</h1>
+                    <p className="text-lg text-gray-600 mt-1">Задайте любой вопрос о вашем здоровье</p>
+                </div>
+            </div>
         </header>
 
-        {/* Секция: Чат с ИИ */}
-        <div className="bg-gray-900 border border-gray-800 rounded-2xl shadow-2xl flex flex-col flex-grow h-[calc(100vh-200px)]">
-          <div ref={chatContainerRef} className="flex-grow p-6 space-y-4 overflow-y-auto pr-2">
+        {/* Chat Section */}
+        <div className="bg-white/80 backdrop-blur-lg border border-slate-200 rounded-2xl shadow-lg flex flex-col flex-grow">
+          <div ref={chatContainerRef} className="flex-grow p-4 sm:p-6 space-y-4 overflow-y-auto custom-scrollbar">
             {chatHistory.map((msg, index) => (
-              <div key={index} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                <div className={`max-w-xs md:max-w-lg p-3 rounded-2xl ${msg.role === 'user' ? 'bg-sky-500 text-white rounded-br-lg' : 'bg-gray-700 text-gray-200 rounded-bl-lg'}`}>
-                  <p className="text-sm leading-relaxed">{msg.parts[0].text}</p>
+              <div key={index} className={`flex items-end gap-2 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                {msg.role === 'model' && <Bot className="w-6 h-6 text-slate-400 flex-shrink-0 mb-1" />}
+                <div className={`max-w-xs md:max-w-lg p-3 rounded-2xl shadow-sm ${
+                    msg.role === 'user' 
+                    ? 'bg-[#00ff90] text-gray-900 rounded-br-none' 
+                    : msg.isError
+                    ? 'bg-red-100 text-red-800 border border-red-200 rounded-bl-none'
+                    : 'bg-slate-100 text-gray-800 rounded-bl-none'
+                }`}>
+                  <p className="text-sm leading-relaxed whitespace-pre-wrap">{msg.parts[0].text}</p>
                 </div>
               </div>
             ))}
             {chatLoading && (
-              <div className="flex justify-start">
-                <div className="bg-gray-700 text-gray-200 p-3 rounded-2xl rounded-bl-lg">
+              <div className="flex items-end gap-2 justify-start">
+                <Bot className="w-6 h-6 text-slate-400 flex-shrink-0 mb-1" />
+                <div className="bg-slate-100 p-3 rounded-2xl rounded-bl-none">
                   <div className="flex items-center space-x-2">
-                    <span className="h-2 w-2 bg-gray-400 rounded-full animate-pulse [animation-delay:-0.3s]"></span>
-                    <span className="h-2 w-2 bg-gray-400 rounded-full animate-pulse [animation-delay:-0.15s]"></span>
-                    <span className="h-2 w-2 bg-gray-400 rounded-full animate-pulse"></span>
+                    <span className="h-2 w-2 bg-slate-400 rounded-full animate-pulse [animation-delay:-0.3s]"></span>
+                    <span className="h-2 w-2 bg-slate-400 rounded-full animate-pulse [animation-delay:-0.15s]"></span>
+                    <span className="h-2 w-2 bg-slate-400 rounded-full animate-pulse"></span>
                   </div>
                 </div>
               </div>
             )}
           </div>
 
-          <form onSubmit={handleSendMessage} className="p-4 flex items-center space-x-2 border-t border-gray-700">
+          <form onSubmit={handleSendMessage} className="p-4 flex items-center space-x-3 border-t border-slate-200 bg-white/50 rounded-b-2xl">
             <input
               type="text"
               value={currentMessage}
               onChange={(e) => setCurrentMessage(e.target.value)}
               placeholder="Спросите о питании, сне..."
-              className="w-full bg-gray-800 border border-gray-700 rounded-full py-2 px-4 focus:outline-none focus:ring-2 focus:ring-sky-400 transition-colors"
+              className="w-full bg-white border border-slate-300 rounded-full py-2.5 px-5 focus:outline-none focus:ring-2 focus:ring-[#00ff90] transition text-sm"
               disabled={chatLoading}
             />
             <button
               type="submit"
-              className="bg-sky-500 p-3 rounded-full hover:bg-sky-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-[#00ff90] p-3 rounded-full hover:bg-[#00e682] transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex-shrink-0 shadow-md shadow-[#00ff90]/40"
               disabled={chatLoading || !currentMessage.trim()}
             >
-              <SendHorizontal className="w-5 h-5 text-white" />
+              <SendHorizontal className="w-5 h-5 text-gray-900" />
             </button>
           </form>
         </div>

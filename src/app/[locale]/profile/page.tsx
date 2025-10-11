@@ -15,11 +15,10 @@ import {
   Users
 } from 'lucide-react';
 
-// Определяем тип Gender для удобства, он должен совпадать с типом в UserContext
+// --- Business logic remains unchanged ---
 type Gender = 'male' | 'female' | 'other' | 'prefer_not_to_say';
 
 export default function ProfilePage() {
-  // --- НАЧАЛО БИЗНЕС-ЛОГИКИ (БЕЗ ИЗМЕНЕНИЙ) ---
   const { currentUser, logout, updateProfile, deleteAccount, loading, updateUserData } = useUser();
 
   const [isEditing, setIsEditing] = useState(false);
@@ -96,23 +95,27 @@ export default function ProfilePage() {
       }
     }
   };
-  // --- КОНЕЦ БИЗНЕС-ЛОГИКИ ---
+  // --- End of business logic ---
 
 
-  // --- НАЧАЛО ОБНОВЛЕННОГО UI ---
+  // --- REDESIGNED UI ---
 
   if (loading && !currentUser) {
     return (
-      <div className="bg-black min-h-screen flex items-center justify-center text-white">
-        <Loader2 className="h-12 w-12 animate-spin" />
+      <div className="bg-slate-50 min-h-screen flex items-center justify-center text-gray-900">
+        <Loader2 className="h-12 w-12 animate-spin text-[#009f5a]" />
       </div>
     );
   }
 
   if (!currentUser) {
     return (
-      <div className="bg-black min-h-screen flex items-center justify-center text-white p-4 text-center">
-        <p className="text-xl text-gray-400">Пользователь не найден. Пожалуйста, войдите в систему.</p>
+      <div className="bg-slate-50 min-h-screen flex items-center justify-center text-gray-800 p-4 text-center">
+        <div className="text-center max-w-md">
+          <UserCircle2 className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+          <h1 className="text-2xl font-bold mb-2">Пользователь не найден</h1>
+          <p className="text-gray-500">Пожалуйста, войдите в систему, чтобы просмотреть свой профиль.</p>
+        </div>
       </div>
     );
   }
@@ -124,30 +127,38 @@ export default function ProfilePage() {
     prefer_not_to_say: 'Не указан'
   };
 
-  // Переиспользуемый компонент для полей профиля
   const ProfileField = ({ icon, label, children }: { icon: React.ReactNode, label: string, children: React.ReactNode }) => (
     <div>
-      <label className="text-sm font-medium text-gray-500 flex items-center">
+      <label className="text-sm font-medium text-gray-500 flex items-center mb-2">
         {icon}
         {label}
       </label>
-      <div className="mt-2">{children}</div>
+      <div>{children}</div>
     </div>
   );
 
   return (
-    <div className="bg-black min-h-screen text-white font-sans">
-      <div className="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8">
+    <div className="relative min-h-screen overflow-hidden bg-slate-50 p-4 sm:p-8 text-gray-900 font-sans">
+      {/* Decorative elements */}
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#45969b]/10 rounded-full filter blur-3xl opacity-70 animate-pulse"></div>
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#00ff90]/10 rounded-full filter blur-3xl opacity-70 animate-pulse animation-delay-4000"></div>
+
+      <div className="relative max-w-4xl mx-auto z-10">
         
-        <header className="mb-10">
-          <h1 className="text-4xl sm:text-5xl font-bold flex items-center">
-            <UserCircle2 className="mr-4 h-10 w-10" />
-            Профиль
-          </h1>
+        <header className="mb-8">
+            <div className="flex items-center">
+                <div className="p-2 rounded-full bg-white/80 border border-slate-200 shadow-md mr-4">
+                    <UserCircle2 className="h-10 w-10 text-[#009f5a]" />
+                </div>
+                <div>
+                    <h1 className="text-4xl font-bold text-gray-900">Профиль</h1>
+                    <p className="text-lg text-gray-600 mt-1">Управляйте информацией своего аккаунта</p>
+                </div>
+            </div>
         </header>
 
-        {/* Основная карточка профиля */}
-        <div className="bg-black border border-gray-800 rounded-xl">
+        {/* Main profile card */}
+        <div className="bg-white/80 backdrop-blur-lg border border-slate-200 rounded-2xl shadow-lg">
           <div className="p-6 sm:p-8">
             <div className="flex justify-between items-start">
                 <div>
@@ -157,7 +168,7 @@ export default function ProfilePage() {
                 {!isEditing && (
                   <button 
                     onClick={handleEditClick} 
-                    className="flex items-center px-4 py-2 bg-black border border-gray-800 text-white font-semibold rounded-lg hover:bg-gray-900 hover:border-gray-700 transition-colors"
+                    className="flex items-center px-4 py-2 bg-white border border-slate-300 text-gray-800 font-semibold rounded-lg hover:bg-slate-100 transition-colors shadow-sm"
                   >
                     <FilePenLine className="mr-2 h-5 w-5" />
                     <span className="hidden sm:inline">Редактировать</span>
@@ -166,26 +177,24 @@ export default function ProfilePage() {
             </div>
           </div>
 
-          <div className="border-t border-gray-800 p-6 sm:p-8">
+          <div className="border-t border-slate-200 p-6 sm:p-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
               
-              {/* Поле Имя */}
               <ProfileField icon={<User className="mr-2 h-4 w-4" />} label="Имя">
                 {isEditing ? (
                   <input
                     type="text"
                     value={displayName}
                     onChange={(e) => setDisplayName(e.target.value)}
-                    className="w-full h-12 p-3 bg-black border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-white transition-colors"
+                    className="w-full px-4 py-3 border border-slate-300 bg-white rounded-lg placeholder-gray-400 text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#00ff90] focus:border-transparent transition"
                   />
                 ) : (
-                  <p className="text-lg text-white h-12 flex items-center px-4 bg-black border border-gray-800 rounded-md">
-                    {currentUser.displayName || <span className="text-gray-600">Не указано</span>}
+                  <p className="text-lg text-gray-800 h-12 flex items-center">
+                    {currentUser.displayName || <span className="text-gray-400">Не указано</span>}
                   </p>
                 )}
               </ProfileField>
 
-              {/* Поле Возраст */}
               <ProfileField icon={<Calendar className="mr-2 h-4 w-4" />} label="Возраст">
                 {isEditing ? (
                   <input
@@ -193,22 +202,21 @@ export default function ProfilePage() {
                     value={age}
                     onChange={(e) => setAge(e.target.value === '' ? '' : parseInt(e.target.value, 10))}
                     placeholder="Не указан"
-                    className="w-full h-12 p-3 bg-black border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-white transition-colors"
+                    className="w-full px-4 py-3 border border-slate-300 bg-white rounded-lg placeholder-gray-400 text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#00ff90] focus:border-transparent transition"
                   />
                 ) : (
-                  <p className="text-lg text-white h-12 flex items-center px-4 bg-black border border-gray-800 rounded-md">
-                    {currentUser.age || <span className="text-gray-600">Не указан</span>}
+                  <p className="text-lg text-gray-800 h-12 flex items-center">
+                    {currentUser.age || <span className="text-gray-400">Не указан</span>}
                   </p>
                 )}
               </ProfileField>
 
-              {/* Поле Пол */}
               <ProfileField icon={<Users className="mr-2 h-4 w-4" />} label="Пол">
                 {isEditing ? (
                   <select
                     value={gender}
                     onChange={(e) => setGender(e.target.value as Gender)}
-                    className="w-full h-12 px-3 bg-black border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-white transition-colors appearance-none"
+                    className="w-full px-3 py-3 border border-slate-300 bg-white rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#00ff90] focus:border-transparent transition appearance-none"
                   >
                     <option value="prefer_not_to_say">Не указывать</option>
                     <option value="male">Мужской</option>
@@ -216,7 +224,7 @@ export default function ProfilePage() {
                     <option value="other">Другой</option>
                   </select>
                 ) : (
-                  <p className="text-lg text-white h-12 flex items-center px-4 bg-black border border-gray-800 rounded-md">
+                  <p className="text-lg text-gray-800 h-12 flex items-center">
                     {genderMap[currentUser.gender || 'prefer_not_to_say']}
                   </p>
                 )}
@@ -224,14 +232,14 @@ export default function ProfilePage() {
             </div>
 
             {isEditing && (
-              <div className="mt-8 pt-6 border-t border-gray-800 flex items-center justify-end space-x-4">
-                <button onClick={handleCancel} className="px-6 py-2.5 bg-black border border-gray-800 text-white font-semibold rounded-lg hover:bg-gray-900 hover:border-gray-700 transition-colors">
+              <div className="mt-8 pt-6 border-t border-slate-200 flex items-center justify-end space-x-4">
+                <button onClick={handleCancel} className="px-6 py-2.5 bg-gray-200 text-gray-800 font-bold rounded-lg hover:bg-gray-300 transition-colors">
                   Отмена
                 </button>
                 <button
                   onClick={handleSave}
                   disabled={isUpdating}
-                  className="flex items-center justify-center px-6 py-2.5 bg-white text-black font-bold rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50"
+                  className="flex items-center justify-center px-6 py-2.5 bg-[#00ff90] text-gray-900 font-bold rounded-lg hover:bg-[#00e682] transition-colors disabled:opacity-50 shadow-lg shadow-[#00ff90]/30"
                 >
                   {isUpdating ? <Loader2 className="animate-spin mr-2 h-5 w-5" /> : <Check className="mr-2 h-5 w-5" />}
                   {isUpdating ? 'Сохранение...' : 'Сохранить'}
@@ -241,30 +249,28 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        {/* Блок Действия */}
-        <div className="mt-8 bg-black border border-gray-800 rounded-xl p-6 sm:p-8">
+        <div className="mt-8 bg-white/80 backdrop-blur-lg border border-slate-200 rounded-2xl shadow-lg p-6 sm:p-8">
             <h2 className="text-xl font-semibold mb-4">Действия</h2>
             <button
               onClick={logout}
-              className="w-full sm:w-auto flex items-center justify-center px-4 py-2 bg-black border border-gray-800 text-white rounded-lg hover:bg-gray-900 hover:border-gray-700 transition-colors"
+              className="w-full sm:w-auto flex items-center justify-center px-4 py-2 bg-white border border-slate-300 text-gray-800 rounded-lg hover:bg-slate-100 transition-colors shadow-sm"
             >
               <LogOut className="mr-2 h-5 w-5" />
               Выйти из аккаунта
             </button>
         </div>
 
-        {/* Опасная зона */}
-        <div className="mt-8 border border-red-900 bg-red-900/10 rounded-xl p-6 sm:p-8">
-            <h2 className="text-xl font-semibold text-red-500 flex items-center">
+        <div className="mt-8 border border-red-300 bg-red-50/80 backdrop-blur-lg rounded-2xl shadow-lg p-6 sm:p-8">
+            <h2 className="text-xl font-semibold text-red-700 flex items-center">
               <ShieldAlert className="mr-3 h-6 w-6" />
               Опасная зона
             </h2>
-            <p className="mt-2 text-sm text-gray-400">
-              Это действие нельзя будет отменить. Все ваши данные будут удалены навсегда.
+            <p className="mt-2 text-sm text-red-600">
+              Это действие нельзя будет отменить. Все ваши данные, включая историю анализов и заметки, будут удалены навсегда.
             </p>
             <button
               onClick={handleDeleteAccount}
-              className="mt-6 w-full sm:w-auto flex items-center justify-center px-4 py-2 bg-red-900/50 text-white font-bold rounded-lg hover:bg-red-900 transition-colors border border-red-800"
+              className="mt-6 w-full sm:w-auto flex items-center justify-center px-4 py-2 bg-red-600 text-white font-bold rounded-lg hover:bg-red-700 transition-colors border border-red-700 shadow-lg shadow-red-500/20"
             >
               Удалить аккаунт
             </button>

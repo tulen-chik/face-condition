@@ -20,7 +20,7 @@ export default function SiteHeader({ locale }: Props) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMenuVisible, setIsMenuVisible] = useState(false);
 
-  // Вся ваша логика остается без изменений
+  // --- Business logic remains unchanged ---
   useEffect(() => {
     if (isMenuOpen) {
       setIsMenuVisible(true);
@@ -47,7 +47,6 @@ export default function SiteHeader({ locale }: Props) {
     };
   }, [isMenuOpen]);
 
-  // ОБНОВЛЕННАЯ НАВИГАЦИЯ с иконками под стиль приложения
   const nav = [
     { href: `/${locale}/calendar`, label: "Анализ", icon: CalendarDays },
     { href: `/${locale}/blog`, label: "Статьи", icon: Paperclip },
@@ -64,21 +63,21 @@ export default function SiteHeader({ locale }: Props) {
 
   return (
     <>
-      {/* ОБНОВЛЕННЫЙ ДИЗАЙН ХЕДЕРА */}
-      <header className="sticky top-0 z-40 bg-black text-white border-b border-white/10">
+      {/* --- REDESIGN: Light theme header with blur effect --- */}
+      <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-lg text-gray-900 border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="h-16 flex items-center justify-between">
-            {/* Логотип */}
+            {/* Logo */}
             <div className="flex items-center">
-              <Link href={`/${locale}`} className="flex items-center space-x-2 group">
-                <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-900 border border-white/10 group-hover:border-sky-500 transition-colors">
-                  <HeartPulse className="w-6 h-6 text-sky-500" />
+              <Link href={`/${locale}`} className="flex items-center space-x-3 group">
+                <div className="flex items-center justify-center w-10 h-10 rounded-full bg-white border border-slate-200 shadow-sm group-hover:border-[#009f5a] transition-colors">
+                  <HeartPulse className="w-6 h-6 text-[#009f5a]" />
                 </div>
-                <span className="text-xl font-bold text-gray-100">Health AI</span>
+                <span className="text-xl font-bold text-gray-900">Sona</span>
               </Link>
             </div>
 
-            {/* Навигация для десктопа */}
+            {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center space-x-2">
               {nav.map((item) => (
                 <Link
@@ -86,8 +85,8 @@ export default function SiteHeader({ locale }: Props) {
                   href={item.href}
                   className={`flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                     isActive(item.href)
-                      ? 'bg-gray-800 text-sky-400' // Активная ссылка
-                      : 'text-gray-400 hover:bg-gray-800 hover:text-white'
+                      ? 'bg-slate-100 text-[#009f5a]' // Active link
+                      : 'text-gray-600 hover:bg-slate-100 hover:text-gray-900'
                   }`}
                 >
                   <item.icon className="w-4 h-4 mr-2" />
@@ -96,14 +95,14 @@ export default function SiteHeader({ locale }: Props) {
               ))}
             </nav>
 
-            {/* Кнопки пользователя для десктопа */}
+            {/* User buttons for desktop */}
             <div className="flex items-center space-x-4">
               {!authLoading && (
                 <div className="hidden md:flex items-center space-x-2">
                   {currentUser ? (
                     <Link
                       href={`/${locale}/profile`}
-                      className="flex items-center space-x-3 pl-2 pr-4 py-2 rounded-full bg-gray-800 hover:bg-gray-700 transition-colors"
+                      className="flex items-center space-x-3 pl-2 pr-4 py-1.5 rounded-full bg-white hover:bg-slate-100 border border-slate-200 transition-colors"
                     >
                       {currentUser.avatarUrl ? (
                         <img 
@@ -112,25 +111,24 @@ export default function SiteHeader({ locale }: Props) {
                           className="w-7 h-7 rounded-full object-cover"
                         />
                       ) : (
-                        <div className="w-7 h-7 rounded-full bg-gray-700 flex items-center justify-center">
-                          <User className="w-4 h-4 text-gray-400" />
+                        <div className="w-7 h-7 rounded-full bg-slate-200 flex items-center justify-center">
+                          <User className="w-4 h-4 text-gray-500" />
                         </div>
                       )}
-                      <span className="text-sm font-medium text-gray-200">{currentUser.displayName || t('profile')}</span>
+                      <span className="text-sm font-medium text-gray-800">{currentUser.displayName || t('profile')}</span>
                     </Link>
                   ) : (
                     <>
                       <Link
                         href={`/${locale}/login`}
-                        className="px-4 py-2 rounded-full text-sm font-medium text-gray-300 hover:bg-gray-800 hover:text-white transition-colors"
+                        className="px-4 py-2 rounded-full text-sm font-medium text-gray-700 hover:bg-slate-100 transition-colors"
                       >
                         {t('login')}
                       </Link>
                       <Link
                         href={`/${locale}/register`}
-                        className="flex items-center space-x-2 px-4 py-2 rounded-full bg-sky-600 text-white text-sm font-bold hover:bg-sky-700 transition-colors"
+                        className="flex items-center space-x-2 px-4 py-2 rounded-full bg-[#00ff90] text-gray-900 text-sm font-bold hover:bg-[#00e682] transition-colors shadow-md shadow-[#00ff90]/30"
                       >
-                        <UserPlus className="w-4 h-4" />
                         <span>{t('register')}</span>
                       </Link>
                     </>
@@ -138,10 +136,10 @@ export default function SiteHeader({ locale }: Props) {
                 </div>
               )}
 
-              {/* Кнопка мобильного меню */}
+              {/* Mobile menu button */}
               <button
                 onClick={() => setIsMenuOpen(true)}
-                className="md:hidden p-2 -mr-2 text-gray-300 hover:bg-gray-800 rounded-lg transition-colors"
+                className="md:hidden p-2 -mr-2 text-gray-600 hover:bg-slate-100 rounded-lg transition-colors"
                 aria-label={t('openMenu')}
               >
                 <Menu className="w-6 h-6" />
@@ -151,28 +149,28 @@ export default function SiteHeader({ locale }: Props) {
         </div>
       </header>
 
-      {/* ОБНОВЛЕННОЕ МОБИЛЬНОЕ МЕНЮ */}
+      {/* --- REDESIGN: Light theme mobile menu --- */}
       {isMenuVisible && (
         <div
           onClick={() => setIsMenuOpen(false)}
-          className={`fixed inset-0 z-50 bg-black/60 backdrop-blur-sm transition-opacity duration-300 ${
+          className={`fixed inset-0 z-50 bg-gray-900/20 backdrop-blur-sm transition-opacity duration-300 ${
             isMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
           }`}
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className={`fixed top-0 right-0 h-full w-full max-w-sm bg-black shadow-2xl flex flex-col transition-transform duration-300 ease-in-out ${
+            className={`fixed top-0 right-0 h-full w-full max-w-sm bg-white/95 backdrop-blur-xl shadow-2xl flex flex-col transition-transform duration-300 ease-in-out border-l border-slate-200 ${
               isMenuOpen ? 'translate-x-0' : 'translate-x-full'
             }`}
           >
-            <div className="flex items-center justify-between p-4 border-b border-gray-800">
+            <div className="flex items-center justify-between p-4 border-b border-slate-200">
               <div className="flex items-center space-x-2">
-                <HeartPulse className="w-6 h-6 text-sky-500" />
-                <span className="text-xl font-bold text-white">Health AI</span>
+                <HeartPulse className="w-6 h-6 text-[#009f5a]" />
+                <span className="text-xl font-bold text-gray-900">Sona</span>
               </div>
               <button
                 onClick={() => setIsMenuOpen(false)}
-                className="p-2 -mr-2 text-gray-400 hover:text-white rounded-lg transition-colors"
+                className="p-2 -mr-2 text-gray-500 hover:text-gray-900 rounded-lg transition-colors"
                 aria-label={t('closeMenu')}
               >
                 <X className="w-6 h-6" />
@@ -180,7 +178,7 @@ export default function SiteHeader({ locale }: Props) {
             </div>
 
             <div className="flex-1 flex flex-col justify-between overflow-y-auto p-4">
-              {/* Основные ссылки */}
+              {/* Main links */}
               <div className="space-y-2">
                 {nav.map((item) => (
                   <Link
@@ -188,8 +186,8 @@ export default function SiteHeader({ locale }: Props) {
                     href={item.href}
                     className={`flex items-center px-4 py-3 rounded-lg text-base font-medium transition-colors ${
                       isActive(item.href)
-                        ? 'bg-sky-500/20 text-sky-400' // ИСПРАВЛЕНИЕ: Яркая активная ссылка
-                        : 'text-gray-200 hover:bg-gray-800 hover:text-white' // ИСПРАВЛЕНИЕ: Более яркий неактивный текст
+                        ? 'bg-[#00ff90]/20 text-[#009f5a]'
+                        : 'text-gray-800 hover:bg-slate-100'
                     }`}
                   >
                     <item.icon className="w-5 h-5 mr-3" />
@@ -198,13 +196,13 @@ export default function SiteHeader({ locale }: Props) {
                 ))}
               </div>
 
-              {/* Блок пользователя */}
-              <div className="pt-4 mt-4 border-t border-gray-800">
+              {/* User block */}
+              <div className="pt-4 mt-4 border-t border-slate-200">
                 {currentUser ? (
                   <div className="space-y-2">
                     <Link
                       href={`/${locale}/profile`}
-                      className="flex items-center w-full px-4 py-3 rounded-lg bg-gray-800 hover:bg-gray-700 transition-colors"
+                      className="flex items-center w-full px-4 py-3 rounded-lg bg-slate-100 hover:bg-slate-200 transition-colors"
                     >
                       {currentUser.avatarUrl ? (
                         <img 
@@ -213,15 +211,15 @@ export default function SiteHeader({ locale }: Props) {
                           className="w-7 h-7 mr-3 rounded-full object-cover"
                         />
                       ) : (
-                        <div className="w-7 h-7 mr-3 rounded-full bg-gray-700 flex items-center justify-center">
-                          <User className="w-4 h-4 text-gray-400" />
+                        <div className="w-7 h-7 mr-3 rounded-full bg-slate-200 flex items-center justify-center">
+                          <User className="w-4 h-4 text-gray-500" />
                         </div>
                       )}
-                      <span className="font-medium text-gray-200">{currentUser.displayName || t('profile')}</span>
+                      <span className="font-medium text-gray-800">{currentUser.displayName || t('profile')}</span>
                     </Link>
                     <button
                       onClick={() => logout()}
-                      className="w-full flex items-center px-4 py-3 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-white transition-colors"
+                      className="w-full flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-slate-100 transition-colors"
                     >
                       <LogOut className="w-5 h-5 mr-3" />
                       {t('logout')}
@@ -231,14 +229,14 @@ export default function SiteHeader({ locale }: Props) {
                   <div className="space-y-2">
                     <Link
                       href={`/${locale}/login`}
-                      className="flex items-center justify-center w-full px-4 py-3 rounded-lg bg-gray-800 hover:bg-gray-700 transition-colors"
+                      className="flex items-center justify-center w-full px-4 py-3 rounded-lg bg-slate-100 hover:bg-slate-200 transition-colors font-semibold text-gray-800"
                     >
                       <LogIn className="w-5 h-5 mr-2" />
                       {t('login')}
                     </Link>
                     <Link
                       href={`/${locale}/register`}
-                      className="flex items-center justify-center w-full px-4 py-3 rounded-lg bg-sky-600 text-white font-bold hover:bg-sky-700 transition-colors"
+                      className="flex items-center justify-center w-full px-4 py-3 rounded-lg bg-[#00ff90] text-gray-900 font-bold hover:bg-[#00e682] transition-colors"
                     >
                       <UserPlus className="w-5 h-5 mr-2" />
                       {t('register')}
